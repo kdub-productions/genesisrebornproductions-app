@@ -1,0 +1,47 @@
+.notFoundContainer {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  .errorSection {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 40px;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+  }
+  
+  .errorCode {
+    font-size: 72px;
+    color: white;
+    margin: 0 0 20px 0;
+  }
+  
+  .errorTitle {
+    font-size: 24px;
+    color: white;
+    margin: 0 0 20px 0;
+  }
+  
+  .errorMessage {
+    color: white;
+    margin: 0 0 30px 0;
+  }
+  
+  .homeButton {
+    display: inline-block;
+    padding: 12px 24px;
+    background: white;
+    color: #6B46C1;
+    text-decoration: none;
+    border-radius: 24px;
+    font-weight: 600;
+    transition: opacity 0.2s;
+  }
+  
+  .homeButton:hover {
+    opacity: 0.9;
+  }

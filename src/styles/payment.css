@@ -1,0 +1,121 @@
+.payment-error {
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border-left: 4px solid #c62828;
+  }
+  
+  .payment-processing {
+    background-color: #e3f2fd;
+    color: #1565c0;
+    padding: 10px 15px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+    border-left: 4px solid #1565c0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .payment-processing::after {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-left: 10px;
+    border: 3px solid #1565c0;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+  }
+  
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .card-element-container {
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    background-color: white;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: #333;
+  }
+  
+  .email-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+  }
+  
+  .email-input:focus {
+    outline: none;
+    border-color: #6772e5;
+    box-shadow: 0 0 0 1px #6772e5;
+  }
+  
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+  }
+  
+  .cancel-button {
+    background-color: #e0e0e0;
+    color: #333;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .cancel-button:hover {
+    background-color: #d0d0d0;
+  }
+  
+  .cancel-button:disabled {
+    background-color: #f0f0f0;
+    cursor: not-allowed;
+  }
+  
+  .buy-beat-button {
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    width: 100%;
+    font-weight: bold;
+  }
+  
+  .buy-beat-button:hover {
+    background-color: #0051a8;
+  }
+  
+  .buy-beat-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
