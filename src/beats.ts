@@ -25,7 +25,7 @@ export interface Beat {
       artwork: "/images/BeatCoverArt/GhostTown.png", // Example path - adjust as needed
       audioPreview: "/audio/previews/GhostTownsample.mp3", // Example path - adjust as needed
       fullAudioId: 1,
-      price: 10.99,
+      price: 2.00,
       licenses: [
         { id: 1, name: "Standard License", price: 10.99, description: "Standard usage rights" },
       ],
