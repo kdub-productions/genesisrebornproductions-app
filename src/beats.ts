@@ -27,7 +27,7 @@ export interface Beat {
       fullAudioId: 1,
       price: 2.00,
       licenses: [
-        { id: 1, name: "Standard License", price: 10.99, description: "Standard usage rights" },
+        { id: 1, name: "Standard License", price: 2.00, description: "Standard usage rights" },
       ],
     },
   // {
