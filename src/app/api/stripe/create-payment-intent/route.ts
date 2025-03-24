@@ -27,7 +27,8 @@ export async function POST(request: NextRequest) {
       clientSecret: paymentIntent.client_secret,
     });
   } catch (error) {
-    console.error('Error creating payment intent:', error);
-    return NextResponse.json({ error: 'Failed to create payment intent' }, { status: 500 });
-  }
+    console.error('Error creating payment intent:', error); // Log the full error for debugging
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'; // Handle non-Error objects
+    return NextResponse.json({ error: errorMessage }, { status: 500 }); // Return a more informative error
+  }  
 }
