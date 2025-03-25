@@ -16,6 +16,7 @@ import Footer from "../../components/footer";
 import BeatPurchaseForm from "../../components/BeatPurchaseForm";
 import PaymentConfirmationPopup from "../../components/PaymentConfirmationPopup";
 
+// Update the Beat interface to match the one in beats.ts
 interface Beat {
   id: number;
   title: string;
@@ -24,7 +25,7 @@ interface Beat {
   audioPreview: string;
   fullAudioId: number;
   price: number;
-  licenses: { id: number; name: string; price: number; description: string }[];
+  license: License; // Single license
 }
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
@@ -218,8 +219,10 @@ export default function BeatsForSale() {
   }, []);
 
   const handleLicenseSelect = (beat: ApiBeat, license: License) => {
-    // Redirect to the provided Stripe payment link
-    window.location.href = 'https://buy.stripe.com/00g8A3f7e8KT0BqeUU';
+    // Use the paymentLink from the license object
+    setSelectedBeat(beat);
+    setSelectedLicense(license);
+    setShowPaymentForm(true);
   };
 
   const handlePaymentCancel = () => {
@@ -266,27 +269,25 @@ export default function BeatsForSale() {
                           Your browser does not support the audio element.
                         </audio>
                         
-                        {beat.licenses.map((license) => (
-                          <div key={license.id}>
-                            {selectedBeat?.id === beat.id && selectedLicense?.id === license.id ? (
-                              showPaymentForm && (
-                                <CheckoutForm 
-                                  beat={beat} 
-                                  license={license} 
-                                  onPaymentComplete={handlePaymentComplete}
-                                  onCancel={handlePaymentCancel}
-                                />
-                              )
-                            ) : (
-                              <button
-                                className="buy-beat-button"
-                                onClick={() => handleLicenseSelect(beat, license)}
-                              >
-                                Buy {license.name} License - ${license.price.toFixed(2)}
-                              </button>
-                            )}
-                          </div>
-                        ))}
+                        <div>
+                          {selectedBeat?.id === beat.id && selectedLicense?.id === beat.license.id ? (
+                            showPaymentForm && (
+                              <CheckoutForm 
+                                beat={beat} 
+                                license={beat.license} 
+                                onPaymentComplete={handlePaymentComplete}
+                                onCancel={handlePaymentCancel}
+                              />
+                            )
+                          ) : (
+                            <button
+                              className="buy-beat-button"
+                              onClick={() => handleLicenseSelect(beat, beat.license)}
+                            >
+                              Buy {beat.license.name} License - ${beat.license.price.toFixed(2)}
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   ))}

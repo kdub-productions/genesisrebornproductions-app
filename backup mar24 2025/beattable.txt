@@ -9,14 +9,7 @@ interface Beat {
   audioPreview: string;
   fullAudioId: number;
   price: number;
-  license: License; // Single license
-}
-
-interface License {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
+  licenses: string[];
 }
 
 const BeatTable: React.FC = () => {
@@ -63,7 +56,7 @@ const BeatTable: React.FC = () => {
           <th>Genre</th>
           <th>Preview</th>
           <th>Price</th>
-          <th>License</th>
+          <th>Licenses</th>
         </tr>
       </thead>
       <Card>
@@ -79,7 +72,7 @@ const BeatTable: React.FC = () => {
               </audio>
             </td>
             <td>${beat.price.toFixed(2)}</td> {/* Format price */}
-            <td>{beat.license.name} - ${beat.license.price.toFixed(2)}</td>
+            <td>{beat.licenses.join(', ')}</td>
           </tr>
         ))}
       </Card>

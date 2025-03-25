@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
+import { beatsData, Beat, License } from '../../../../beats'; // Import beatsData and types
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
   apiVersion: '2025-02-24.acacia',
@@ -7,7 +8,19 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
 
 export async function POST(request: NextRequest) {
   try {
-    const { beatId, licenseId, price } = await request.json();
+    const { beatId, licenseId, price, beatTitle } = await request.json();
+
+    // Find the beat in your data
+    const beat: Beat | undefined = beatsData.find((b) => b.id === beatId);
+    if (!beat) {
+      return NextResponse.json({ error: 'Beat not found' }, { status: 404 });
+    }
+
+    // Directly access the license property
+    const license: License = beat.license;
+    if (license.id !== licenseId) {
+      return NextResponse.json({ error: 'License not found' }, { status: 404 });
+    }
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -16,7 +29,9 @@ export async function POST(request: NextRequest) {
           price_data: {
             currency: 'usd',
             product_data: {
-              name: `Beat License - ${licenseId}`,
+              name: `${beat.title} - ${license.name}`, // Dynamic product name
+              description: license.description,
+              images: [`${request.headers.get('origin')}${beat.artwork}`],
             },
             unit_amount: price * 100, // Stripe uses cents
           },
@@ -26,11 +41,18 @@ export async function POST(request: NextRequest) {
       mode: 'payment',
       success_url: `${request.headers.get('origin')}/thank-you`,
       cancel_url: `${request.headers.get('origin')}/beatsforsale`,
+      metadata: {
+        beatId: beat.id,
+        beatTitle: beat.title,
+        licenseId: license.id,
+        licenseName: license.name,
+      },
     });
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
     console.error('Error creating checkout session:', error);
-    return NextResponse.json({ error: 'Failed to create checkout session' }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }
