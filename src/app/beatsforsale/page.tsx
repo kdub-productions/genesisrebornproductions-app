@@ -282,7 +282,7 @@ export default function BeatsForSale() {
                               className="buy-beat-button"
                               onClick={() => handleLicenseSelect(beat, beat.license)}
                             >
-                              Buy {beat.license.name} License - ${beat.license.price.toFixed(2)}
+                              Buy {beat.license.name} ${beat.license.price.toFixed(2)}
                             </button>
                           )}
                         </div>
