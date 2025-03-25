@@ -8,7 +8,7 @@ const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Genesis Reborn Productions',
-  description: 'New Beats And New Music From Our Artists',
+  description: 'New Beats And New Music From Our Artists. In Collaboration With Real Royalty Records. https://realroyaltyrecords.vercel.app',
 };
 
 export default function RootLayout({
@@ -20,8 +20,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {children}
-        <Analytics /> {/* Ensure Analytics component is used */}
         <SpeedInsights /> {/* Ensure SpeedInsights component is used */}
+        <Analytics /> {/* Ensure Analytics component is used */}
       </body>
     </html>
   );

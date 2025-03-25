@@ -17,13 +17,19 @@ export default function NotFound() {
   return (
     <div className="notFoundContainer">
       <div className="errorSection">
-        <h1 className="errorCode">404</h1>
+        <h1 className="errorCode">Heck!</h1>
         <h2 className="errorTitle">Page Not Found</h2>
         <p className="errorMessage">
           Sorry, we couldn't find the page you're looking for. Site is in Constant Development
         </p>
         <Link href="/" className="homeButton">
           Return Home
+        </Link>
+        <div>
+          ------
+        </div>
+        <Link href="/beatsforsale" className="homeButton">
+        Or Check Out Our Beats
         </Link>
       </div>
     </div>
