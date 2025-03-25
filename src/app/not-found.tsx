@@ -20,7 +20,7 @@ export default function NotFound() {
         <h1 className="errorCode">Heck!</h1>
         <h2 className="errorTitle">Page Not Found</h2>
         <p className="errorMessage">
-          Sorry, we couldn't find the page you're looking for. Site is in Constant Development
+          Sorry, we couldn't find the page you're looking for. Site is in constant development.
         </p>
         <Link href="/" className="homeButton">
           Return Home
