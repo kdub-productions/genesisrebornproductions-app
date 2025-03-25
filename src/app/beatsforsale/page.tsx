@@ -220,9 +220,7 @@ export default function BeatsForSale() {
 
   const handleLicenseSelect = (beat: ApiBeat, license: License) => {
     // Use the paymentLink from the license object
-    setSelectedBeat(beat);
-    setSelectedLicense(license);
-    setShowPaymentForm(true);
+    window.location.href = license.paymentLink;
   };
 
   const handlePaymentCancel = () => {

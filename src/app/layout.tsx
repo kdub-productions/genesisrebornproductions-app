@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '../styles/globals.css';
 import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"; // Ensure correct import
+
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
@@ -19,8 +20,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {children}
-        <Analytics />
-        <SpeedInsights />
+        <Analytics /> {/* Ensure Analytics component is used */}
+        <SpeedInsights /> {/* Ensure SpeedInsights component is used */}
       </body>
     </html>
   );

@@ -15,7 +15,7 @@ export interface License {
     name: string;
     price: number;
     description: string;
-    paymentLink: string; // Add payment link property
+    paymentLink: string; // Ensure this property exists
 }
 
 // Example Beat Data
@@ -38,6 +38,6 @@ export const beatsData: Beat[] = [
     audioPreview: "/audio/previews/BetterDaysSample.mp3",
     fullAudioId: 2,
     price: 5.00,
-    license: { id: 2, name: "Standard License", price: 5.00, description: "Standard usage rights", paymentLink: "https://buy.stripe.com/aEU5nR4sA6CL4RGeUV" },
+    license: { id: 1, name: "Standard License", price: 5.00, description: "Standard usage rights", paymentLink: "https://buy.stripe.com/aEU5nR4sA6CL4RGeUV" },
   },
 ];
