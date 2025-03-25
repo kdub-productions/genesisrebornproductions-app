@@ -30,6 +30,7 @@ export default function MobileNavbar() {
       {menuOpen && (
         <div className="mobile-navbar-content">
           <div className="mobile-logo">
+          <Link href='/'>
             <Image
               src="/images/Genisis Reborn _real_logo SNAKE AND APPLE.png"
               alt="Genesis Reborn Productions Logo"
@@ -37,6 +38,7 @@ export default function MobileNavbar() {
               height={120}
               priority
             />
+            </Link>
           </div>
           <ul className="mobile-nav-links">
             <li><Link href="/beatsforsale" className="buy-button">🔥 Buy Beats</Link></li>

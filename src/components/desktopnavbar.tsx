@@ -14,6 +14,7 @@ export default function DesktopNavbar() {
   return (
     <nav className="navbar">
       <div className="companyname">
+      <Link href='/'>
         <Image
           src="/images/Genisis Reborn _real_logo2.png"
           alt="Genesis Reborn Productions Logo"
@@ -21,6 +22,7 @@ export default function DesktopNavbar() {
           height={200}
           priority
         />
+        </Link>
       </div>
       <ul className="nav-links">
         <li><Link href="/beatsforsale" className="buy-button">🔥 Buy Beats</Link></li>
