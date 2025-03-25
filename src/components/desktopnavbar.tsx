@@ -29,8 +29,8 @@ export default function DesktopNavbar() {
         <li><Link href="/">Home</Link></li>
         <li><Link href="/socialmedia">Social Media</Link></li>
         <li>
-          <span onClick={() => toggleDropdown("services")} className="dropdown-toggle">
-            Services ▼
+          <span onClick={() => toggleDropdown("services")} className="dropdown-toggle nav-links">
+            Services 
           </span>
           <ul className={`dropdown ${activeDropdown === "services" ? "show" : ""}`}>
             <li><a href="#mixing-mastering">Mixing/Mastering</a></li>
@@ -39,8 +39,8 @@ export default function DesktopNavbar() {
         </li>
         <li><Link href="/about">About</Link></li>
         <li>
-          <span onClick={() => toggleDropdown("contact")} className="dropdown-toggle">
-            Contact ▼
+          <span onClick={() => toggleDropdown("contact")} className="dropdown-toggle nav-links listitemeffectdesknav">
+            Contact
           </span>
           <ul className={`dropdown ${activeDropdown === "contact" ? "show" : ""}`}>
             <li>
