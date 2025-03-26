@@ -16,7 +16,7 @@ export default function Footer() {
         <Image className="realroyaltyrecordslogo" src="/images/rrr-logo123.png" alt="Real Royalty Records Check Them Out!" width={130} height={150} />
         </a>
       </div>
-      <div className='footer-links'>
+      <div className="footer-links">
         <p>Follow us on:</p>
         <ul className="footer-links-list">
         <li><a href="https://www.instagram.com/genesis_reborn_productions/" target="_blank" rel="noopener noreferrer">Instagram</a></li>
@@ -25,6 +25,13 @@ export default function Footer() {
        <li>Join Our Server On:</li>
         <li><a href="https://www.twitter.com/@genesisrebornproductions" target="_blank" rel="noopener noreferrer">Discord</a></li>
         </ul>
+        </div>
+        <div className="footer-links">
+          <Link href="/privacy">
+          <ul className="footer-links-list">
+            <li>Privacy Policy</li>
+          </ul>
+          </Link>
         </div>
     </footer>
   );
