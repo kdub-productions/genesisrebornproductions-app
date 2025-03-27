@@ -71,10 +71,10 @@ const PrivacyPolicyPage: React.FC = () => {
 
       <ul className="privacyPolicyList">
         <li>
-          <strong>Access, Correction, and Deletion:</strong> You have the right to access, correct, or delete your personal information. You can do this by logging into your account or contacting us directly.
+          <strong>Access, Correction, and Deletion:</strong> You have the right to access, correct, or delete your personal information. You can do this by contacting us directly.
         </li>
         <li>
-          <strong>Opt-Out of Marketing:</strong> You can opt out of receiving marketing communications from us by following the unsubscribe instructions in our emails or by contacting us.
+          <strong>Opt-Out of Marketing:</strong> You can opt out of receiving marketing communications from us by contacting us.
         </li>
         <li>
           <strong>Contact for Inquiries:</strong> If you have any questions or concerns about our privacy practices, please contact us using the information provided below.
@@ -84,7 +84,7 @@ const PrivacyPolicyPage: React.FC = () => {
       <h2 className="privacyPolicySectionTitle">6. Children's Privacy</h2>
 
       <p>
-        Our services are not intended for individuals under the age of 13. We do not knowingly collect personal information from children under 13. If you believe that we have inadvertently collected information from a child under 13, please contact us immediately.
+        Our services are not intended for individuals under the age of 18. We do not knowingly collect personal information from children under 18. If you believe that we have inadvertently collected information from a child under 18, please contact us immediately.
       </p>
 
       <h2 className="privacyPolicySectionTitle">7. Changes to This Privacy Policy</h2>
@@ -98,7 +98,7 @@ const PrivacyPolicyPage: React.FC = () => {
       <p>
         If you have any questions about this Privacy Policy, please contact us at:
         <br />
-        Email: <a href="mailto:your-email@example.com">your-email@example.com</a>
+        Email: <a href="mailto:genesisrebornproductions@gmail.com">genesisrebornproductions@gmail.com</a>
         <br />
         [Your Business Address (Optional)]
       </p>
