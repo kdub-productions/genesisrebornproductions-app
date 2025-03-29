@@ -1,7 +1,9 @@
+"use client"
 import React from 'react';
-
+import '@/styles/privacy-page.css';
 const PrivacyPolicyPage: React.FC = () => {
   return (
+    <div className="page-container">
     <div className="privacyPolicyContainer">
       <h1 className="privacyPolicyTitle">Privacy Policy for Genesis Reborn Productions</h1>
 
@@ -105,6 +107,7 @@ const PrivacyPolicyPage: React.FC = () => {
       <p className="text-sm text-gray-500 mt-4">
         Last Updated: [Date]
       </p>
+    </div>
     </div>
   );
 };

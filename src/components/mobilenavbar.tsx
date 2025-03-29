@@ -43,6 +43,7 @@ export default function MobileNavbar() {
           <ul className="mobile-nav-links">
             <li><Link href="/beatsforsale" className="buy-button">🔥 Buy Beats</Link></li>
             <li><Link href="/">Home</Link></li>
+            <li><Link href="/lyrics">Lyrics</Link></li>
             <li><Link href="/socialmedia">Social Media</Link></li>
             <li><Link href="#mixing-mastering">Mixing/Mastering</Link></li>
             <li><Link href="/beatsforsale">Beats For Sale</Link></li>

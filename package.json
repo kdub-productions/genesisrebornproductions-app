@@ -26,6 +26,7 @@
     "nodemailer": "^6.10.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-swipeable": "^7.0.2",
     "stripe": "^17.7.0"
   },
   "devDependencies": {

@@ -95,7 +95,6 @@
   
   .section-heading {
     font-size: 2rem;
-    margin-bottom: var(--space-xl);
     position: relative;
     padding-bottom: var(--space-sm);
   }
