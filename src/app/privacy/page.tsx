@@ -1,10 +1,14 @@
 "use client"
 import React from 'react';
-import '@/styles/privacy-page.css';
+import '@/styles/privacyPolicy.css';
+import '@/styles/styles.css';
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
 const PrivacyPolicyPage: React.FC = () => {
   return (
     <div className="page-container">
-    <div className="privacyPolicyContainer">
+      <Navbar />
+    <div className="main-content">
       <h1 className="privacyPolicyTitle">Privacy Policy for Genesis Reborn Productions</h1>
 
       <p>
@@ -101,13 +105,13 @@ const PrivacyPolicyPage: React.FC = () => {
         <br />
         Email: <a href="mailto:genesisrebornproductions@gmail.com">genesisrebornproductions@gmail.com</a>
         <br />
-        [Your Business Address (Optional)]
       </p>
 
       <p className="text-sm text-gray-500 mt-4">
-        Last Updated: [Date]
+        Last Updated: [28th of March 2025]
       </p>
     </div>
+    <Footer />
     </div>
   );
 };
