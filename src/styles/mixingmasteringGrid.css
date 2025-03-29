@@ -4,7 +4,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem 1rem;
-  color: var(--foreground);
+  color: var(--secondary); /* Changed to primary-light */
 }
 
 /* Intro Section */
@@ -16,7 +16,7 @@
 .services-intro h2 {
   font-size: 2.5rem;
   margin-bottom: 1rem;
-  color: var(--background);
+  color: var(--primary-rgb); /* Using primary */
 }
 
 .services-intro p {
@@ -24,6 +24,7 @@
   max-width: 800px;
   margin: 0 auto;
   line-height: 1.6;
+  color: var(--primary-light); /* Changed to primary-light */
 }
 
 /* Service Highlights */
@@ -54,17 +55,18 @@
   font-size: 2.5rem;
   margin-bottom: 1rem;
   display: block;
+  color: var(--primary); /* Changed to primary */
 }
 
 .highlight-item h3 {
   font-size: 1.3rem;
   margin-bottom: 0.5rem;
-  color: var(--foreground);
+  color: var(--primary); /* Changed to primary */
 }
 
 .highlight-item p {
   font-size: 0.9rem;
-  color: var(--foreground);
+  color: var(--primary-light); /* Changed to primary-light */
 }
 
 /* Service Tiers Section */
@@ -76,13 +78,11 @@
   text-align: center;
   font-size: 2rem;
   margin-bottom: 1rem;
-  color: var(--foreground);
 }
 
 .service-subtitle {
   text-align: center;
   font-size: 1.1rem;
-  color: var(--foreground);
   margin-bottom: 2rem;
 }
 
@@ -140,7 +140,6 @@
 .tier-card h4 {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  color: var(--foreground);
   text-align: center;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
@@ -160,7 +159,7 @@
 
 .tier-description {
   font-size: 0.9rem;
-  color: var(--foreground);
+  color: var(--primary-light); /* Changed to primary-light */
   margin-bottom: 1.5rem;
   line-height: 1.4;
   font-style: italic;
@@ -181,7 +180,7 @@
 
 .tier-turnaround {
   font-size: 0.9rem;
-  color: var(--foreground);
+  color: var(--primary-light); /* Changed to primary-light */
   margin-bottom: 1.5rem;
   text-align: center;
 }
@@ -195,7 +194,7 @@
 .tier-features li {
   padding: 0.5rem 0;
   position: relative;
-  color: var(--foreground);
+  color: var(--primary-light); /* Changed to primary-light */
   padding-left: 1.2rem;
 }
 
@@ -269,29 +268,29 @@
 .file-upload-section h3 {
   font-size: 2rem;
   margin-bottom: 1.5rem;
-  color: var(--foreground);
+  color: var(--primary); /* Changed to primary */
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .upload-instructions {
   font-size: 1rem;
   margin-bottom: 1.5rem;
-  color: var(--foreground);
+  color: var(--primary-light); /* Changed to primary-light */
   line-height: 1.6;
 }
 
 .file-requirements {
-  background-color: #626262;
+  background-color: var(--glass-bg); /* Changed to glass-bg */
   border-radius: 4px;
   padding: 1.5rem;
   margin-bottom: 2rem;
-  border: 1px solid #444;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--glass-border); /* Changed to glass-border */
+  box-shadow: var(--glass-shadow); /* Changed to glass-shadow */
 }
 
 .file-requirements h4 {
   margin-bottom: 1rem;
-  color: #ffffff;
+  color: var(--primary); /* Changed to primary */
   font-weight: bold;
 }
 
@@ -302,7 +301,7 @@
 .file-requirements li {
   margin-bottom: 0.5rem;
   line-height: 1.4;
-  color: #ffffff;
+  color: var(--primary-light); /* Changed to primary-light */
 }
 
 /* Form Styles */
@@ -322,16 +321,16 @@
   display: block;
   margin-bottom: 5px;
   font-weight: 500;
-  color: #626262;
+  color: var(--primary); /* Changed to primary */
 }
 
 .form-group input,
 .form-group textarea {
   padding: 0.8rem;
   border-radius: var(--radius-sm);
-  border: 1px solid #444;
-  background-color: #626262;
-  color: #fff;
+  border: 1px solid var(--glass-border); /* Changed to glass-border */
+  background-color: var(--glass-bg); /* Changed to glass-bg */
+  color: var(--primary-light); /* Changed to primary-light */
   font-size: 1rem;
   font-weight: medium;
 }
@@ -339,8 +338,8 @@
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #666;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+  border-color: var(--primary); /* Changed to primary */
+  box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1); /* Changed to primary */
 }
 
 input[type="file"] {
@@ -349,8 +348,8 @@ input[type="file"] {
 
 .browse-btn {
   background-color: transparent;
-  color: #626262;
-  border: 1px solid #666;
+  color: var(--primary); /* Changed to primary */
+  border: 1px solid var(--primary); /* Changed to primary */
   padding: 10px 15px;
   border-radius: 4px;
   cursor: pointer;
@@ -359,20 +358,20 @@ input[type="file"] {
 }
 
 .browse-btn:hover {
-  background-color: #bdb8b8;
+  background-color: var(--primary-light); /* Changed to primary-light */
 }
 
 .file-list {
-  background-color: #1a1a1a;
+  background-color: var(--glass-bg); /* Changed to glass-bg */
   border-radius: 4px;
   padding: 1.5rem;
-  border: 1px solid #444;
+  border: 1px solid var(--glass-border); /* Changed to glass-border */
   margin-bottom: 15px;
 }
 
 .file-list h4 {
   margin-bottom: 1rem;
-  color: #ffffff;
+  color: var(--primary); /* Changed to primary */
   font-weight: bold;
 }
 
@@ -386,8 +385,8 @@ input[type="file"] {
   justify-content: space-between;
   align-items: center;
   padding: 0.8rem 0;
-  border-bottom: 1px solid var(--glass-border);
-  color: #ffffff;
+  border-bottom: 1px solid var(--glass-border); /* Changed to glass-border */
+  color: var(--primary-light); /* Changed to primary-light */
 }
 
 .file-list li:last-child {
@@ -396,8 +395,8 @@ input[type="file"] {
 
 .remove-file-btn {
   background-color: transparent;
-  color: #ccc;
-  border: 1px solid #666;
+  color: var(--primary-light); /* Changed to primary-light */
+  border: 1px solid var(--primary); /* Changed to primary */
   padding: 5px 10px;
   border-radius: 4px;
   cursor: pointer;
@@ -406,7 +405,7 @@ input[type="file"] {
 }
 
 .remove-file-btn:hover {
-  background-color: #333;
+  background-color: var(--primary); /* Changed to primary */
 }
 
 .submit-btn {
@@ -463,7 +462,7 @@ input[type="file"] {
   text-align: center;
   font-size: 2rem;
   margin-bottom: 2rem;
-  color: var(--foreground);
+  color: var(--primary); /* Using primary */
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
@@ -489,7 +488,7 @@ input[type="file"] {
 .faq-item h4 {
   font-size: 1.2rem;
   margin-bottom: 1rem;
-  color: var(--foreground);
+  color: var(--primary); /* Changed to primary */
   cursor: pointer;
   display: flex;
   justify-content: space-between;
@@ -499,7 +498,7 @@ input[type="file"] {
 
 .faq-item-content {
   font-size: 1rem;
-  color: var(--foreground);
+  color: var(--primary-light); /* Changed to primary-light */
   margin-top: 1rem;
   line-height: 1.6;
 }
