@@ -45,7 +45,7 @@ export default function MobileNavbar() {
             <li><Link href="/">Home</Link></li>
             <li><Link href="/lyrics">Lyrics</Link></li>
             <li><Link href="/socialmedia">Social Media</Link></li>
-            <li><Link href="#mixing-mastering">Mixing/Mastering</Link></li>
+            <li><Link href="/mixingandmastering">Mixing/Mastering</Link></li>
             <li><Link href="/beatsforsale">Beats For Sale</Link></li>
             <li><Link href="/about">About</Link></li>
             <li>

@@ -34,7 +34,7 @@ export default function DesktopNavbar() {
             Services 
           </span>
           <ul className={`dropdown ${activeDropdown === "services" ? "show" : ""}`}>
-            <li><a href="#mixing-mastering">Mixing/Mastering</a></li>
+            <li><Link href="/mixingandmastering">Mixing/Mastering</Link></li>
             <li><Link href="/beatsforsale">Beats For Sale</Link></li>
           </ul>
         </li>
