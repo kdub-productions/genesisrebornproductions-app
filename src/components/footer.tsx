@@ -23,7 +23,7 @@ export default function Footer() {
        <li><a href="https://www.facebook.com/genesisrebornproductions/" target="_blank" rel="noopener noreferrer">Facebook</a></li>
         <li><a href="https://x.com/GenesisReb14539" target="_blank" rel="noopener noreferrer">X</a></li>
        <li>Join Our Server On:</li>
-        <li><a href="https://www.twitter.com/@genesisrebornproductions" target="_blank" rel="noopener noreferrer">Discord</a></li>
+        <li><a href="https://discord.com/channels/1340154396452851722/1340154401486278790" target="_blank" rel="noopener noreferrer">Discord</a></li>
         </ul>
         </div>
         <div className="footer-links">

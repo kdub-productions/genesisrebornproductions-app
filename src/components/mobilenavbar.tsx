@@ -46,8 +46,7 @@ export default function MobileNavbar() {
             <li><Link href="/lyrics">Lyrics</Link></li>
             <li><Link href="/socialmedia">Social Media</Link></li>
             <li><Link href="/mixingandmastering">Mixing/Mastering</Link></li>
-            <li><Link href="/beatsforsale">Beats For Sale</Link></li>
-            <li><Link href="/about">About</Link></li>
+            <li><Link href="/aboutus">About</Link></li>
             <li>
               <form action="mailto:genesisrebornproductions@gmail.com" method="post" encType="text/plain">
                 <input type="text" name="name" placeholder="Your Name" required />

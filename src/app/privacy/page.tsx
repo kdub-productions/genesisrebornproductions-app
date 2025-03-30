@@ -19,7 +19,7 @@ const PrivacyPolicyPage: React.FC = () => {
 
       <ul className="privacyPolicyList">
         <li>
-          <strong>Personal Information:</strong> When you create an account, make a purchase, or contact us, we may collect personal information such as your name, email address, billing address, and payment details.
+          <strong>Personal Information:</strong> When you make a purchase, or contact us, we may collect personal information such as your name, email address, billing address, and payment details.
         </li>
         <li>
           <strong>Usage Data:</strong> We automatically collect information about how you interact with our website, including your IP address, browser type, operating system, pages visited, and the dates and times of your visits.

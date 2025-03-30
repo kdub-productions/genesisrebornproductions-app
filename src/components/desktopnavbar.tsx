@@ -38,7 +38,7 @@ export default function DesktopNavbar() {
             <li><Link href="/beatsforsale">Beats For Sale</Link></li>
           </ul>
         </li>
-        <li><Link href="/about">About</Link></li>
+        <li><Link href="/aboutus">About</Link></li>
         <li>
           <span onClick={() => toggleDropdown("contact")} className="dropdown-toggle nav-links listitemeffectdesknav">
             Contact
