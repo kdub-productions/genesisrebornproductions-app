@@ -59,7 +59,7 @@ Mixing and mastering our groups music from the beginning.
           <p className="team-role">Design and Marketing Lead</p>
           <p>
           Yung Rahk or Rahk Da Ahk has also been making music with us since the beginning. He has been a big part of our developemnt around God. 
-          Rahk is the owner of the record label, Real Royalty Records. <a href="https://realroyaltyrecords.vercel.app" target="_blank" rel="noopener noreferrer">https://realroyaltyrecords.vercel.app</a>
+          Rahk is also the owner of the record label, Real Royalty Records. <a href="https://realroyaltyrecords.vercel.app" target="_blank" rel="noopener noreferrer">https://realroyaltyrecords.vercel.app</a>
           </p>
         </div>
         <h2>Our Studio</h2>
