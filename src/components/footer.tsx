@@ -1,5 +1,5 @@
 "use client";
-import '../styles/styles.css';
+import '@/styles/styles.css';
 import Image from 'next/image';
 import Link from 'next/link';
 export default function Footer() {
@@ -27,11 +27,14 @@ export default function Footer() {
         </ul>
         </div>
         <div className="footer-links">
-          <Link href="/privacy">
           <ul className="footer-links-list">
+          <Link href="/privacy">
             <li>Privacy Policy</li>
-          </ul>
+            </Link>
+            <Link href="/termsofservice">
+            <li>Terms Of Service</li>
           </Link>
+          </ul>
         </div>
     </footer>
   );

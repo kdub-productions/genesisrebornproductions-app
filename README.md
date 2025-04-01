@@ -2,7 +2,7 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Social Media Integration
 
-This project includes integration with Twitter (X) and Discord APIs to display real social media content, while Instagram content uses manually updated mock data.
+This project includes integration with Twitter (X) and Discord APIs to display real social media content, while Instagram content uses manually updated data.
 
 To set up the API integrations:
 
@@ -10,9 +10,9 @@ To set up the API integrations:
 2. Fill in your API keys and tokens for Twitter (X) and Discord
 3. Restart the development server
 
-For Instagram, no API keys are required as the application uses mock data that can be updated manually in the `src/utils/mockSocialMediaData.ts` file.
+For Instagram, no API keys are required as the application uses manually updated data that can be edited directly in the `src/utils/instagramSocialMediaData.ts` file.
 
-If Twitter or Discord API keys are not provided, the application will fall back to using empty arrays for those platforms.
+If Twitter or Discord API keys are not provided, the application will display empty arrays for those platforms. There is no fallback to mock data - only real API data is used for these platforms.
 
 ## Getting Started
 

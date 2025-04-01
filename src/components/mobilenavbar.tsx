@@ -44,7 +44,7 @@ export default function MobileNavbar() {
             <li><Link href="/beatsforsale" className="buy-button">🔥 Buy Beats</Link></li>
             <li><Link href="/">Home</Link></li>
             <li><Link href="/lyrics">Lyrics</Link></li>
-            <li><Link href="/socialmedia">Social Media</Link></li>
+            <li><Link href="/socialmediapage">Social Media</Link></li>
             <li><Link href="/mixingandmastering">Mixing/Mastering</Link></li>
             <li><Link href="/aboutus">About</Link></li>
             <li>

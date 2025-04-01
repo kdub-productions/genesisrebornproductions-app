@@ -1,20 +1,20 @@
 "use client"
 import React from 'react';
-import '@/styles/privacyPolicy.css';
+import '@/styles/termsofservice.css';
 import '@/styles/styles.css';
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import PrivacyPolicycomp from "@/components/privacypolicycomp";
-const PrivacyPolicyPage: React.FC = () => {
+import TermsOfService from '@/components/termsofservicecomp';
+const TermsOfServicepage: React.FC = () => {
   return (
     <div className="page-container">
       <Navbar />
     <div className="main-content">
-   <PrivacyPolicycomp />
+   <TermsOfService />
     </div>
     <Footer />
     </div>
   );
 };
 
-export default PrivacyPolicyPage;
+export default TermsOfServicepage;
