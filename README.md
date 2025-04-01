@@ -1,5 +1,19 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Social Media Integration
+
+This project includes integration with Twitter (X) and Discord APIs to display real social media content, while Instagram content uses manually updated mock data.
+
+To set up the API integrations:
+
+1. Copy the `.env.local.example` file to `.env.local`
+2. Fill in your API keys and tokens for Twitter (X) and Discord
+3. Restart the development server
+
+For Instagram, no API keys are required as the application uses mock data that can be updated manually in the `src/utils/mockSocialMediaData.ts` file.
+
+If Twitter or Discord API keys are not provided, the application will fall back to using empty arrays for those platforms.
+
 ## Getting Started
 
 First, run the development server:

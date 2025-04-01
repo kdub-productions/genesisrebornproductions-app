@@ -28,7 +28,7 @@ export default function DesktopNavbar() {
         <li><Link href="/beatsforsale" className="buy-button">🔥 Buy Beats</Link></li>
         <li><Link href="/">Home</Link></li>
         <li><Link href="/lyrics">Lyrics</Link></li>
-        <li><Link href="/socialmedia">Social Media</Link></li>
+        <li><Link href="/socialmediapage">Social Media</Link></li>
         <li>
           <span onClick={() => toggleDropdown("services")} className="dropdown-toggle nav-links">
             Services 
