@@ -1,6 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
+// Remove the deprecated config export
+// export const config = {
+//   api: {
+//     bodyParser: false,
+//   },
+// };
+
+// Add proper export for Next.js App Router
+export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   host: 'smtp.gmail.com',
@@ -72,9 +83,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
