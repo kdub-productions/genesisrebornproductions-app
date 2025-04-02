@@ -1,11 +1,11 @@
-"use client"
-import '../styles/loading.css';
+import React from 'react';
+import '@/styles/site-wide-styles/loading.css';
 
 const Loading = () => {
   return (
     <div className="loading-overlay">
       <div className="loading-spinner"></div>
-      <p className="loading-text">Loading...</p>
+      <div className="loading-text">Loading...</div>
     </div>
   );
 };

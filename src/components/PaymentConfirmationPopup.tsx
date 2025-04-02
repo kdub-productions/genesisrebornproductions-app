@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import '@/styles/payment-confirmation.css';
+import '@/styles/beats-shop-page-styles/payment-confirmation.css';
 
 interface PaymentConfirmationPopupProps {
   type: 'success' | 'decline';

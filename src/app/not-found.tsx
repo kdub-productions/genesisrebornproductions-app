@@ -2,9 +2,9 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import '../styles/notFound.css';
-import '../styles/styles.css';
-import "../styles/loading.css";
+import '@/styles/other-page-styles/notFound.css';
+import '@/styles/site-wide-styles/styles.css';
+import "@/styles/site-wide-styles/loading.css";
 
 export default function NotFound() {
   useEffect(() => {

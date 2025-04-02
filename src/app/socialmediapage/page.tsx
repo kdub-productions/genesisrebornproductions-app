@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Loading from "@/components/loading";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
-import "@/styles/loading.css";
+import "@/styles/site-wide-styles/loading.css";
 import SocialMedias from '@/components/socialmedias';
 export default function Home() {
   const [loading, setLoading] = useState(true);

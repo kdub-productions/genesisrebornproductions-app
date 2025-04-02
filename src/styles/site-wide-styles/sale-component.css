@@ -1,0 +1,60 @@
+.beat-sale-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.sale-badge {
+  position: absolute;
+  text-align: center;
+  top: -10px;
+  left: -10px;
+  background-color: #ff3b30;
+  color: white !important;
+  font-weight: bold;
+  text-shadow: none !important;
+  padding: 5px 10px;
+  border-radius: 4px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  font-size: 0.9rem;
+  transform: rotate(5deg);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  white-space: nowrap;
+}
+
+.beat-price-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  font-size: 0.9rem;
+}
+
+.discounted-price {
+  font-weight: bold;
+  color: #ff3b30;
+  font-size: 1.1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .sale-badge {
+    font-size: 0.8rem;
+    padding: 4px 8px;
+  }
+  
+  .original-price {
+    font-size: 0.8rem;
+  }
+  
+  .discounted-price {
+    font-size: 1rem;
+  }
+}

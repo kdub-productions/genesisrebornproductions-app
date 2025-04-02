@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
-import { Beat } from '../beats';
-import { License } from '../app/api/licenses';
+import { Beat } from '@/types/beats';
+import { License } from '@/app/api/licenses';
 
 interface BeatPurchaseFormProps {
   beat: Beat;

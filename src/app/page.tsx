@@ -1,10 +1,10 @@
 "use client";
 import { useState, useEffect } from 'react';
-import Navbar from "../components/navbar";
-import VideoGrid from "../components/VideoGrid";
-import Footer from "../components/footer";
-import Loading from "../components/loading";
-import "../styles/loading.css";
+import Navbar from "@/components/navbar";
+import VideoGrid from "@/components/VideoGrid";
+import Footer from "@/components/footer";
+import Loading from "@/components/loading";
+import "@/styles/site-wide-styles/loading.css";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);

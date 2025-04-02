@@ -6,7 +6,7 @@
  */
 
 import { InstagramPost, XPost, DiscordPost } from '@/types/socialmedia';
-import { mockInstagramPosts } from './instagramSocialMediaData';
+import { mockInstagramPosts } from '@/utils/instagramSocialMediaData';
 // Instagram uses manually updated data, while Twitter (X) and Discord use real API data only
 
 // Instagram posts (using manually updated data)

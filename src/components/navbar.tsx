@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
-import MobileNavbar from "./mobilenavbar";
-import DesktopNavbar from "./desktopnavbar";
+import MobileNavbar from "@/components/mobilenavbar";
+import DesktopNavbar from "@/components/desktopnavbar";
 
 export default function Navbar() {
   const [isMobile, setIsMobile] = useState(false);

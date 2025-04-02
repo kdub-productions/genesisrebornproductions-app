@@ -1,6 +1,6 @@
 "use client";
 
-import MixingMasteringGrid from './mixingmasteringGrid';
+import MixingMasteringGrid from '@/components/mixingmasteringGrid';
 
 interface MixingMasteringProps {
   setLoading: (loading: boolean) => void;

@@ -1,20 +1,22 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Beat as ApiBeat } from '../../beats';
-import { License } from '../api/licenses';
-import Loading from '../../components/loading';
+import { Beat as ApiBeat } from '@/types/beats';
+import { License } from '@/app/api/licenses';
+import Loading from '@/components/loading';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements, CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import Image from 'next/image';
-import '@/styles/payment.css';
-import '@/styles/beats-store.css';
-import '@/styles/styles.css';
-import '@/styles/beat-purchase-form.css';
-import '@/styles/payment-confirmation.css';
-import Navbar from "../../components/navbar";
-import Footer from "../../components/footer";
-import BeatPurchaseForm from "../../components/BeatPurchaseForm";
-import PaymentConfirmationPopup from "../../components/PaymentConfirmationPopup";
+import '@/styles/beats-shop-page-styles/payment.css';
+import '@/styles/beats-shop-page-styles/beats-store.css';
+import '@/styles/site-wide-styles/styles.css';
+import '@/styles/beats-shop-page-styles/beat-purchase-form.css';
+import '@/styles/beats-shop-page-styles/payment-confirmation.css';
+import '@/styles/site-wide-styles/sale-component.css';
+import Navbar from "@/components/navbar";
+import Footer from "@/components/footer";
+import BeatPurchaseForm from "@/components/BeatPurchaseForm";
+import PaymentConfirmationPopup from "@/components/PaymentConfirmationPopup";
+import BeatStoreSale from '@/components/sales/beats-store-sale'; // Remove this line to disable sale
 
 // Update the Beat interface to match the one in beats.ts
 interface Beat {
@@ -206,6 +208,8 @@ export default function BeatsForSale() {
   const [selectedLicense, setSelectedLicense] = useState<License | null>(null);
   const [showPaymentForm, setShowPaymentForm] = useState<boolean>(false);
   const [showThankYouPopup, setShowThankYouPopup] = useState<boolean>(false);
+  const [saleActive] = useState<boolean>(false);
+  const [salePercentage] = useState<number>(50); 
 
   useEffect(() => {
     const fetchBeats = async () => {
@@ -219,8 +223,10 @@ export default function BeatsForSale() {
   }, []);
 
   const handleLicenseSelect = (beat: ApiBeat, license: License) => {
-    // Use the paymentLink from the license object
-    window.location.href = license.paymentLink;
+    const finalPrice = saleActive ? license.price * ((100 - salePercentage) / 100) : license.price;
+    setSelectedBeat(beat);
+    setSelectedLicense(license);
+    setShowPaymentForm(true);
   };
 
   const handlePaymentCancel = () => {
@@ -244,6 +250,11 @@ export default function BeatsForSale() {
         <div className='main-content'>
           <main>
             <section className="beats-store-container">
+              {saleActive && (
+                <div className="store-wide-sale-banner">
+                  <h2>50% OFF ALL BEATS!</h2>
+                </div>
+              )}
               <h1 className="section-heading">Beats For Sale</h1>
               {beatData.length > 0 ? (
                 <div className="beats-grid">
@@ -261,7 +272,18 @@ export default function BeatsForSale() {
                       <div className="beat-details">
                         <h3>{beat.title}</h3>
                         <p>Genre: {beat.genre}</p>
-                        <p>Price: ${beat.price.toFixed(2)}</p>
+                        <div className="price-section">
+                          {saleActive ? (
+                            <BeatStoreSale 
+                              originalPrice={beat.price} 
+                              license={beat.license}
+                              discountPercentage={salePercentage}
+                              showBadge={true}
+                            />
+                          ) : (
+                            <p>Price: ${beat.license.price.toFixed(2)}</p>
+                          )}
+                        </div>
                         <audio controls className="beat-audio-player">
                           <source src={beat.audioPreview} type="audio/mpeg" />
                           Your browser does not support the audio element.

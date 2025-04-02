@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from 'react';
-import '@/styles/aboutus.css';
+import '@/styles/other-page-styles/aboutus.css';
 
 interface AboutUsProps {
   setLoading: (loading: boolean) => void;

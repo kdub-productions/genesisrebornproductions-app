@@ -1,6 +1,6 @@
 // src/app/api/beats/route.ts
 import { NextResponse } from 'next/server';
-import { beatsData } from '../../../beats';
+import { beatsData } from '@/types/beats';
 
 export async function GET() {
   try {

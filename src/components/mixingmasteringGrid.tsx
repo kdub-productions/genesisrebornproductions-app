@@ -1,13 +1,14 @@
 "use client";
 
 import { useState, useEffect, useRef } from 'react';
-import '@/styles/mixingmasteringGrid.css';
+import '@/styles/Mixing-mastering-styles/mixingmasteringGrid.css';
+import MixingMasteringSale from '@/components/sales/mixing-mastering-sale';
 
 interface MixingMasteringGridProps {
   setLoading: (loading: boolean) => void;
 }
 
-const MixingMasteringGrid = ({ setLoading }: MixingMasteringGridProps) => {
+export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGridProps) => {
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [name, setName] = useState('');
@@ -15,12 +16,18 @@ const MixingMasteringGrid = ({ setLoading }: MixingMasteringGridProps) => {
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
+  const [saleActive,] = useState(false); 
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Set loading to false when component is mounted
-    setLoading(false);
-    return () => setLoading(true); // Reset on unmount
+    // Only set loading to false once component is fully mounted
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 100);
+
+    return () => {
+      clearTimeout(timer);
+    };
   }, [setLoading]);
 
   const serviceTiers = [
@@ -182,6 +189,11 @@ const MixingMasteringGrid = ({ setLoading }: MixingMasteringGridProps) => {
   return (
     <div className="mixing-mastering-container">
       <section className="services-intro">
+        {saleActive && (
+          <div className="store-wide-sale-banner">
+            <h2>50% OFF ALL MIXING & MASTERING SERVICES!</h2>
+          </div>
+        )}
         <h2>Professional Mixing & Mastering Services</h2>
         <p>
           Take your music to the next level with our professional mixing and mastering services. 
@@ -222,7 +234,16 @@ const MixingMasteringGrid = ({ setLoading }: MixingMasteringGridProps) => {
             >
               <div className="tier-badge">{tier.id === 'standard' ? 'MOST POPULAR' : ''}</div>
               <h4>{tier.name}</h4>
-              <div className="tier-price">{tier.price}</div>
+              <div className="tier-price">
+                {saleActive ? (
+                  <MixingMasteringSale
+                    originalPrice={parseInt(tier.price.replace('$', ''))}
+                    serviceName={tier.name}
+                  />
+                ) : (
+                  <span className="regular-price">{tier.price}</span>
+                )}
+              </div>
               <div className="tier-turnaround">Turnaround: {tier.turnaround}</div>
               {tier.description && <p className="tier-description">{tier.description}</p>}
               <ul className="tier-features">
@@ -410,4 +431,4 @@ const MixingMasteringGrid = ({ setLoading }: MixingMasteringGridProps) => {
   );
 };
 
-export default MixingMasteringGrid;
+export default MixingMasteringGridComponent;

@@ -1,8 +1,8 @@
-"use client";
-import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import "../styles/styles.css";
+import React from 'react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { useState } from 'react';
+import "@/styles/site-wide-styles/styles.css";
 
 export default function DesktopNavbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);

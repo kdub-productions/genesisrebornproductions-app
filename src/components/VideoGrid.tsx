@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import '../styles/loading.css';
-import '../styles/videoGrid.css';
+import '@/styles/site-wide-styles/loading.css';
+import '@/styles/Homepage-styles/videoGrid.css';
 const apiKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 const channelId = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID;
 const videosPerPage = 12;

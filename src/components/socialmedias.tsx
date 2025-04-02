@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import '@/styles/socialmediapage.css';
+import '@/styles/other-page-styles/socialmediapage.css';
 import { InstagramPost, XPost, DiscordPost, ApiResponse } from '@/types/socialmedia';
 
 interface SocialMediasProps {

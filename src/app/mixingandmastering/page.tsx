@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import React, { useState } from 'react';
-import '@/styles/mixingmasteringGrid.css';
-import '@/styles/styles.css';
+import '@/styles/Mixing-mastering-styles/mixingmasteringGrid.css';
+import '@/styles/site-wide-styles/styles.css';
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Loading from "@/components/loading";
