@@ -26,12 +26,13 @@
 
 
 .sale-badge {
+  font-family: Arial, Helvetica, sans-serif;
   position: absolute;
   text-align: center;
   top: -10px;
   left: -10px;
   background-color: #ff3b30;
-  color: white !important;
+  color: white;
   font-weight: bold;
   text-shadow: none !important;
   padding: 5px 10px;

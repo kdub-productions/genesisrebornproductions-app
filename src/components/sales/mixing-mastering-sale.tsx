@@ -15,7 +15,9 @@ const MixingMasteringSale: React.FC<MixingMasteringSaleProps> = ({
 
   return (
     <div className="service-sale-container">
-      <div className="sale-badge">50% OFF</div>
+      <div className="sale-badge">
+        50% OFF
+        </div>
       <div className="price-container">
         <span className="original-price">${originalPrice.toFixed(2)}</span>
         <span className="discounted-price">${discountedPrice.toFixed(2)}</span>
