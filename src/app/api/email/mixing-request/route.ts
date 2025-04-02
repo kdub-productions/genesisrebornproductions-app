@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-// Create a transporter object using SMTP transport with app password
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   host: 'smtp.gmail.com',
@@ -17,33 +16,34 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-// Verify the transporter connection
-transporter.verify(function(error, success) {
-  if (error) {
-    console.error('SMTP connection error:', error);
-  } else {
-    console.log('SMTP server is ready to take our messages');
-  }
-});
-
 export async function POST(request: NextRequest) {
   try {
-    const { name, email, selectedTier, message, fileNames } = await request.json();
+    const formData = await request.formData();
+    const name = formData.get('name') as string;
+    const email = formData.get('email') as string;
+    const selectedTier = formData.get('selectedTier') as string;
+    const message = formData.get('message') as string;
+    const files = formData.getAll('files') as File[];
 
-    // Validate required fields
     if (!name || !email || !selectedTier) {
       return NextResponse.json(
         { error: 'Missing required fields' },
         { status: 400 }
       );
     }
-    
-    // Format file names for email if they exist
-    const filesSection = fileNames && fileNames.length > 0 
-      ? `<p><strong>Files:</strong></p><ul>${fileNames.map((file: string) => `<li>${file}</li>`).join('')}</ul>`
-      : '<p><strong>Files:</strong> No files uploaded</p>';
 
-    // Email content
+    // Convert Files to Buffers
+    const attachments = await Promise.all(files.map(async (file) => {
+      const arrayBuffer = await file.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+      
+      return {
+        filename: file.name,
+        content: buffer,
+        contentType: file.type,
+      };
+    }));
+
     const mailOptions = {
       from: process.env.EMAIL_USER || 'genesisrebornproductions@gmail.com',
       to: 'genesisrebornproductions@gmail.com',
@@ -54,22 +54,27 @@ export async function POST(request: NextRequest) {
         <p><strong>Customer Email:</strong> ${email}</p>
         <p><strong>Service Tier:</strong> ${selectedTier}</p>
         <p><strong>Additional Instructions:</strong> ${message || 'None provided'}</p>
-        ${filesSection}
+        <p><strong>Files Attached:</strong> ${files.map(f => f.name).join(', ')}</p>
         <p><strong>Reply-To:</strong> ${email}</p>
       `,
+      attachments,
       replyTo: email
     };
 
-    // Send email
     await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error';
     console.error('Error sending email:', error);
     return NextResponse.json(
-      { error: `Failed to send email: ${errorMessage}` },
+      { error: 'Failed to send email' },
       { status: 500 }
     );
   }
 }
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+};

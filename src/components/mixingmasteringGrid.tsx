@@ -133,42 +133,36 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       setSubmitMessage('Please select a service tier');
       return;
     }
-
+  
     if (files.length === 0) {
       setSubmitMessage('Please upload at least one file');
       return;
     }
-
+  
     setIsSubmitting(true);
     setSubmitMessage('Submitting your request...');
-
+  
     try {
-      // Get the selected tier name
-      const selectedTierName = serviceTiers.find(tier => tier.id === selectedTier)?.name || '';
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('email', email);
+      formData.append('selectedTier', serviceTiers.find(tier => tier.id === selectedTier)?.name || '');
+      formData.append('message', message);
       
-      // Get file names for email
-      const fileNames = files.map(file => `${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)`);
-      
-      // Send email with form data
+      // Append each file to the FormData
+      files.forEach(file => {
+        formData.append('files', file);
+      });
+  
       const response = await fetch('/api/email/mixing-request', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          selectedTier: selectedTierName,
-          message,
-          fileNames
-        }),
+        body: formData,
       });
-
+  
       const result = await response.json();
       
       if (result.success) {
         setSubmitMessage('Your request has been submitted successfully! We will contact you shortly.');
-        
         // Reset form
         setFiles([]);
         setName('');
@@ -273,14 +267,15 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
           For mixing projects, please ensure each track is properly labeled and organized.
         </p>
         
+        // In the file requirements section
         <div className="file-requirements">
           <h4>File Requirements:</h4>
           <ul>
             <li>WAV or AIFF format (24-bit, 44.1kHz or higher)</li>
             <li>Properly labeled tracks (e.g., "Kick", "Snare", "Vocals")</li>
             <li>Include any reference tracks if available</li>
-            <li>Maximum file size: 500MB per file</li>
-            <li>Compress multiple files into a ZIP archive if possible</li>
+            <li>Maximum file size: 25MB per file (Gmail attachment limit)</li>
+            <li>For larger files, please use a file sharing service like WeTransfer or Dropbox and include the link in the message</li>
           </ul>
         </div>
 

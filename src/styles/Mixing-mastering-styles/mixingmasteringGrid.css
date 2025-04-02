@@ -329,14 +329,18 @@
   padding: 0.8rem;
   border-radius: var(--radius-sm);
   border: 1px solid var(--glass-border); /* Changed to glass-border */
-  background-color: var(--glass-bg); /* Changed to glass-bg */
+  background-color: rgba(163, 161, 161, 0.458); /* Changed to glass-bg */
   color: var(--primary-light); /* Changed to primary-light */
   font-size: 1rem;
   font-weight: medium;
+  box-shadow: #2929292b 2px 3px 4px;
+  opacity: 1;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
+  transition: all .2s ease;
+  transform: scale(1.05);
   outline: none;
   border-color: var(--primary); /* Changed to primary */
   box-shadow: 0 0 0 2px rgba(var(--primary-rgb), 0.1); /* Changed to primary */
