@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
-import '@/styles/termsofservice.css';
-import '@/styles/styles.css';
+import '@/styles/other-page-styles/termsofservice.css';
+import '@/styles/site-wide-styles/styles.css';
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import TermsOfService from '@/components/termsofservicecomp';

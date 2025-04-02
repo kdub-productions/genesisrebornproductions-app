@@ -1,6 +1,6 @@
 "use client"
 import React from "react";
-import "@/styles/privacyPolicy.css";
+import "@/styles/other-page-styles/privacyPolicy.css";
 
 
 const PrivacyPolicy = () => {
