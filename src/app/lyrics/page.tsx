@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from 'react';
 import React, { useState } from 'react';
-import '@/styles/lyrics-page.css';
-import '@/styles/styles.css';
+import '@/styles/other-page-styles/lyrics-page.css';
+import '@/styles/site-wide-styles/styles.css';
 import { songs } from '../lyrics/data/songsData';
 import { useSwipeable } from 'react-swipeable';
 import Navbar from "@/components/navbar";

@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
-import '@/styles/privacyPolicy.css';
-import '@/styles/styles.css';
+import '@/styles/other-page-styles/privacyPolicy.css';
+import '@/styles/site-wide-styles/styles.css';
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import PrivacyPolicycomp from "@/components/privacypolicycomp";
