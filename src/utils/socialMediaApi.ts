@@ -26,9 +26,14 @@ export async function fetchInstagramPosts(): Promise<InstagramPost[]> {
 export async function fetchXPosts(): Promise<XPost[]> {
   console.log("Fetching fresh x data");
   try {
-    // Check if API keys are available
     const bearerToken = process.env.TWITTER_BEARER_TOKEN;
     const username = process.env.TWITTER_USERNAME;
+    
+    console.log("Twitter credentials check:", {
+      hasBearerToken: !!bearerToken,
+      hasUsername: !!username,
+      username: username
+    });
     
     if (!bearerToken || !username) {
       console.warn('Twitter bearer token or username not found in environment variables');
