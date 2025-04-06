@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import '@/styles/site-wide-styles/loading.css';
 import '@/styles/Homepage-styles/videoGrid.css';
 const apiKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 const channelId = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID;
@@ -34,8 +33,32 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
   const [pageTokens, setPageTokens] = useState<{[key: number]: string}>({1: ''});
 
   useEffect(() => {
-    // Clear cache and fetch fresh data on every page load
-    localStorage.clear();
+    // Check if cache exists and is still valid
+    const cachedData = localStorage.getItem('videoGridData');
+    if (cachedData) {
+      try {
+        const parsedData = JSON.parse(cachedData);
+        const cacheTimestamp = parsedData.timestamp || 0;
+        const cacheExpiration = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+        
+        // If cache is still valid (less than 24 hours old)
+        if (Date.now() - cacheTimestamp < cacheExpiration) {
+          console.log("Using cached video data");
+          setVideos(parsedData.videos || []);
+          setCurrentPage(parsedData.currentPage || 1);
+          setNextPageToken(parsedData.nextPageToken || '');
+          setPrevPageToken(parsedData.prevPageToken || '');
+          setPageTokens(parsedData.pageTokens || {1: ''});
+          setLoading(false);
+          return;
+        } else {
+          console.log("Cache expired, fetching fresh data");
+        }
+      } catch (error) {
+        console.error("Error parsing cache:", error);
+      }
+    }
+    
     setCurrentPage(1); // Reset to page 1 on initial load
     fetchVideos();
   }, [setLoading]);
@@ -52,18 +75,23 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
     // Check if we already have the videos for this page in cache
     const cachedData = localStorage.getItem('videoGridData');
     if (cachedData) {
-      const parsedData = JSON.parse(cachedData);
-      const pageVideos = parsedData.pageVideos || {};
-      const storedPageTokens = parsedData.pageTokens || {};
-      
-      // If we have cached videos for the target page and its token matches
-      if (pageVideos[targetPage] && storedPageTokens[targetPage] === pageToken) {
-        setVideos(pageVideos[targetPage]);
-        setCurrentPage(targetPage);
-        setNextPageToken(storedPageTokens[targetPage + 1] || '');
-        setPrevPageToken(storedPageTokens[targetPage - 1] || '');
-        setLoading(false);
-        return;
+      try {
+        const parsedData = JSON.parse(cachedData);
+        const pageVideos = parsedData.pageVideos || {};
+        const storedPageTokens = parsedData.pageTokens || {};
+        
+        // If we have cached videos for the target page and its token matches
+        if (pageVideos[targetPage] && storedPageTokens[targetPage] === pageToken) {
+          console.log("Using cached page data");
+          setVideos(pageVideos[targetPage]);
+          setCurrentPage(targetPage);
+          setNextPageToken(storedPageTokens[targetPage + 1] || '');
+          setPrevPageToken(storedPageTokens[targetPage - 1] || '');
+          setLoading(false);
+          return;
+        }
+      } catch (error) {
+        console.error("Error parsing cache:", error);
       }
     }
 
@@ -113,7 +141,8 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
         pageVideos: {
           ...existingPageVideos,
           [targetPage]: fetchedVideos
-        }
+        },
+        timestamp: Date.now() // Add timestamp for cache expiration
       };
       localStorage.setItem('videoGridData', JSON.stringify(cacheData));
       
@@ -139,20 +168,16 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
                 src={video.thumbnail} 
                 alt={video.title} 
                 loading="lazy"
+                width="480"
+                height="360"
                 className="thumbnail-image" 
                 onError={(e) => {
                   console.error('Error loading thumbnail:', e);
                   e.currentTarget.src = '/images/fallback-thumbnail.jpg';
                 }}
               />
-              <iframe 
-                src={`${video.src}?enablejsapi=1&origin=${window.location.origin}&rel=0&showinfo=0`}
-                allowFullScreen 
-                allow="autoplay"
-                className="video-iframe hidden"
-                loading="lazy"
-                title={video.title}
-              />
+              {/* Only create iframe when needed instead of preloading all iframes */}
+              <div className="iframe-container"></div>
             </div>
             <div className="video-details">
               <h3 className="video-title">{video.title}</h3>
@@ -160,13 +185,24 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
                 className="play-button"
                 onClick={(e) => {
                   const parent = (e.target as HTMLElement).closest('.video-card');
-                  const iframe = parent?.querySelector('iframe');
+                  const iframeContainer = parent?.querySelector('.iframe-container');
                   const img = parent?.querySelector('img');
                   const playButton = parent?.querySelector('.play-button');
-                  if (iframe && img && playButton) {
+                  
+                  if (iframeContainer && img && playButton) {
+                    // Create iframe only when user clicks play
+                    const iframe = document.createElement('iframe');
                     iframe.src = `${video.src}?autoplay=1&rel=0&showinfo=0&controls=1`;
-                    iframe.classList.remove('hidden');
-                    iframe.classList.add('iframe-visible');
+                    iframe.allowFullscreen = true;
+                    iframe.allow = "autoplay";
+                    iframe.className = "video-iframe iframe-visible";
+                    iframe.title = video.title;
+                    
+                    // Clear container and add the iframe
+                    iframeContainer.innerHTML = '';
+                    iframeContainer.appendChild(iframe);
+                    
+                    // Hide thumbnail and play button
                     img.style.display = 'none';
                     (playButton as HTMLElement).style.display = 'none';
                   }

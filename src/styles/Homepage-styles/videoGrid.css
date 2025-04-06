@@ -21,6 +21,7 @@
     transform: translateY(-0.25rem);
     box-shadow: 0 0.75rem 1.25rem rgba(0, 0, 0, 0.15);
     border-color: #00f7ff;
+    will-change: transform;
   }
   
   .thumbnail-container {
@@ -38,6 +39,8 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.3s ease;
+    will-change: transform;
+    backface-visibility: hidden;
   }
   
   .video-card:hover .thumbnail-image {
@@ -55,6 +58,7 @@
     transition: opacity 0.3s ease;
     pointer-events: none;
     z-index: 1;
+    will-change: opacity;
   }
   
   .video-iframe.iframe-visible {
@@ -98,6 +102,7 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    will-change: transform, opacity;
     transition: all 0.2s ease;
     z-index: 10;
     box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.4);

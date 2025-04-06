@@ -1,10 +1,10 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 import Navbar from "@/components/navbar";
-import VideoGrid from "@/components/VideoGrid";
+// Import VideoGrid lazily for code splitting
+const VideoGrid = lazy(() => import("@/components/VideoGrid"));
 import Footer from "@/components/footer";
 import Loading from "@/components/loading";
-import "@/styles/site-wide-styles/loading.css";
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -24,7 +24,9 @@ export default function Home() {
           <main>
             <section className="video-grid-section">
               <h1 className="section-heading">Featured Videos</h1>
-              <VideoGrid setLoading={setLoading} />
+              <Suspense fallback={<div className="loading-placeholder">Loading videos...</div>}>
+                <VideoGrid setLoading={setLoading} />
+              </Suspense>
             </section>
           </main>
         </div>

@@ -1,6 +1,8 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '@/styles/site-wide-styles/globals.css';
+import '@/styles/site-wide-styles/loading.css';
+import '@/styles/site-wide-styles/loading-placeholder.css';
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next"; // Ensure correct import
 
