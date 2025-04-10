@@ -16,11 +16,10 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
-  const [saleActive,] = useState(true); 
+  const [saleActive,] = useState(true);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    // Only set loading to false once component is fully mounted
     const timer = setTimeout(() => {
       setLoading(false);
     }, 100);
@@ -83,7 +82,7 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       ]
     },
     {
-      id: 'vocal',
+      id: 'vocal-prod', // Changed ID to be unique
       name: 'Vocal Production',
       price: '$100',
       turnaround: '3-5 days',
@@ -97,8 +96,25 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
         'All delivery formats (MP3, WAV, FLAC)',
         'Stem exports available'
       ]
-    }
+    },
+    {
+      id: 'vocal-splitting', 
+      name: 'Vocal Splitting',
+      price: '$300', // Kept the higher price
+      turnaround: '10-15 days', // Kept the longer turnaround
+      description: 'Advanced AI-powered service to isolate vocals from a mixed track for remixing, karaoke, or archival purposes.', // Updated description
+      features: [ // Updated features relevant to vocal splitting
+        'High-quality vocal stem isolation from stereo mix',
+        'Instrumental track generation (minus vocals)',
+        'Delivery of separated vocal and instrumental WAV files',
+        'Ideal for remixers, producers, and DJs needing acapellas',
+        'One revision included for artifact review',
+        'Utilizes cutting-edge source separation technology',
+        'Note: Quality depends heavily on source material complexity'
+      ]
+    },
   ];
+  // --- END of UPDATED serviceTiers Array ---
 
   const handleTierSelect = (tierId: string) => {
     setSelectedTier(tierId);
@@ -109,7 +125,8 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
     document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' });
     // Clear the message after 5 seconds
     setTimeout(() => {
-      if (submitMessage.includes(`You selected: ${tierName}`)) {
+      // Check if the current message is still the selection confirmation before clearing
+      if (submitMessage.startsWith(`You selected: ${tierName}`)) {
         setSubmitMessage('');
       }
     }, 5000);
@@ -118,6 +135,7 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
+      // Limit total files if needed, or check total size
       setFiles(prev => [...prev, ...newFiles]);
     }
   };
@@ -128,40 +146,43 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!selectedTier) {
       setSubmitMessage('Please select a service tier');
       return;
     }
-  
+
+    // For Vocal Splitting, usually only one source file is needed.
+    // You might want specific validation here if needed.
     if (files.length === 0) {
       setSubmitMessage('Please upload at least one file');
       return;
     }
-  
+
     setIsSubmitting(true);
     setSubmitMessage('Submitting your request...');
-  
+
     try {
       const formData = new FormData();
       formData.append('name', name);
       formData.append('email', email);
-      formData.append('selectedTier', serviceTiers.find(tier => tier.id === selectedTier)?.name || '');
+      const selectedTierName = serviceTiers.find(tier => tier.id === selectedTier)?.name || 'Unknown Tier';
+      formData.append('selectedTier', selectedTierName);
       formData.append('message', message);
-      
+
       // Append each file to the FormData
       files.forEach(file => {
         formData.append('files', file);
       });
-  
+
       const response = await fetch('/api/email/mixing-request', {
         method: 'POST',
         body: formData,
       });
-  
+
       const result = await response.json();
-      
-      if (result.success) {
+
+      if (response.ok && result.success) {
         setSubmitMessage('Your request has been submitted successfully! We will contact you shortly.');
         // Reset form
         setFiles([]);
@@ -169,6 +190,9 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
         setEmail('');
         setMessage('');
         setSelectedTier(null);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''; // Clear the file input visually
+        }
       } else {
         setSubmitMessage(`Error: ${result.error || 'Failed to submit request. Please try again.'}`);
       }
@@ -186,13 +210,14 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
         {saleActive && (
           <div className="store-wide-sale-banner">
             <h2>50% OFF ALL MIXING & MASTERING SERVICES!</h2>
+            <p>(Discount applied automatically at invoice)</p> {/* Clarify how discount works */}
           </div>
         )}
         <h2>Professional Mixing & Mastering Services</h2>
         <p>
-          Take your music to the next level with our professional mixing and mastering services. 
-          We offer different tiers to suit your needs and budget, ensuring your tracks sound 
-          polished and ready for release on all platforms.
+          Take your music to the next level with our professional mixing and mastering services.
+          We offer different tiers to suit your needs and budget, ensuring your tracks sound
+          polished and ready for release on all platforms. Explore our specialized Vocal Production and Vocal Splitting services too!
         </p>
         <div className="services-highlights">
           <div className="highlight-item">
@@ -218,14 +243,16 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
         <p className="service-subtitle">Select the package that best fits your project needs</p>
         <div className="tier-cards">
           {serviceTiers.map((tier) => (
-            <div 
-              key={tier.id} 
+            <div
+              key={tier.id}
               className={`tier-card ${selectedTier === tier.id ? 'selected' : ''}`}
               onClick={() => handleTierSelect(tier.id)}
               role="button"
               tabIndex={0}
               aria-pressed={selectedTier === tier.id}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleTierSelect(tier.id); }} // Added keyboard accessibility
             >
+              {/* Keep MOST POPULAR badge logic or adjust if needed */}
               <div className="tier-badge">{tier.id === 'standard' ? 'MOST POPULAR' : ''}</div>
               <h4>{tier.name}</h4>
               <div className="tier-price">
@@ -245,10 +272,10 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
                   <li key={index}>{feature}</li>
                 ))}
               </ul>
-              <button 
-                className="select-tier-btn" 
+              <button
+                className="select-tier-btn"
                 onClick={(e) => {
-                  e.stopPropagation(); // Prevent triggering the parent div's onClick
+                  e.stopPropagation();
                   handleTierSelect(tier.id);
                 }}
                 type="button"
@@ -261,162 +288,177 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       </section>
 
       <section id="upload-section" className="file-upload-section">
-        <h3>Upload Your Files</h3>
+        <h3>Upload Your Files & Provide Details</h3>
         <p className="upload-instructions">
-          Please upload your project files or stems in WAV or AIFF format (24-bit preferred). 
-          For mixing projects, please ensure each track is properly labeled and organized.
+          Select your desired service above, then provide your contact information and upload your audio file(s).
+          For mixing/mastering, please upload stems (WAV/AIFF, 24-bit preferred). For Vocal Splitting, upload the final stereo mix.
         </p>
-        
-        // In the file requirements section
+
         <div className="file-requirements">
           <h4>File Requirements:</h4>
           <ul>
-            <li>WAV or AIFF format (24-bit, 44.1kHz or higher)</li>
-            <li>Properly labeled tracks (e.g., "Kick", "Snare", "Vocals")</li>
-            <li>Include any reference tracks if available</li>
-            <li>Maximum file size: 25MB per file (Gmail attachment limit)</li>
-            <li>For larger files, please use a file sharing service like WeTransfer or Dropbox and include the link in the message</li>
+            <li>Mixing/Mastering: WAV or AIFF stems (24-bit, 44.1kHz+), properly labeled.</li>
+            <li>Vocal Splitting: Final Stereo Mix (WAV, AIFF, or high-quality MP3).</li>
+            <li>Include reference tracks if available (link in message).</li>
+            <li>Max file size via form: 25MB per file (uses email).</li>
+            <li>For larger files/stems: Use WeTransfer/Dropbox/Google Drive and paste the share link in the message below.</li>
           </ul>
         </div>
 
         <form onSubmit={handleSubmit} className="upload-form">
+          {/* --- Form fields remain the same --- */}
           <div className="form-group">
             <label htmlFor="name">Name</label>
-            <input 
-              type="text" 
-              id="name" 
-              value={name} 
-              onChange={(e) => setName(e.target.value)} 
-              required 
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              aria-required="true"
             />
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
-            <input 
-              type="email" 
-              id="email" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
-              required 
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              aria-required="true"
             />
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="service-tier">Selected Service</label>
-            <input 
-              type="text" 
-              id="service-tier" 
-              value={selectedTier ? serviceTiers.find(tier => tier.id === selectedTier)?.name || '' : ''} 
-              readOnly 
+            <input
+              type="text"
+              id="service-tier"
+              value={selectedTier ? serviceTiers.find(tier => tier.id === selectedTier)?.name || '' : 'Please select a tier above'}
+              readOnly
+              aria-label="Selected service tier (read-only)"
             />
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="file-upload">Upload Files</label>
-            <input 
-              type="file" 
-              id="file-upload" 
-              onChange={handleFileChange} 
-              multiple 
+
+          <div className="form-group file-input-group"> {}
+            <label htmlFor="file-upload">Upload Files (or provide link below)</label>
+            <input
+              type="file"
+              id="file-upload"
+              onChange={handleFileChange}
+              multiple
               ref={fileInputRef}
               accept=".wav,.aiff,.mp3,.zip,.rar"
+              style={{ display: 'none' }}
+              aria-hidden="true" 
             />
-            <button 
-              type="button" 
-              className="browse-btn" 
+            <button
+              type="button"
+              className="browse-btn"
               onClick={() => fileInputRef.current?.click()}
             >
-              Browse Files
+              Browse Files...
             </button>
+            <span className="file-info">Max 25MB per file via form</span> {/* Added info */}
           </div>
-          
+
           {files.length > 0 && (
             <div className="file-list">
-              <h4>Uploaded Files:</h4>
+              <h4>Selected Files:</h4>
               <ul>
                 {files.map((file, index) => (
                   <li key={index}>
-                    {file.name} ({(file.size / (1024 * 1024)).toFixed(2)} MB)
-                    <button 
-                      type="button" 
-                      className="remove-file-btn" 
+                    <span className="file-name">{file.name}</span>
+                    <span className="file-size">({(file.size / (1024 * 1024)).toFixed(2)} MB)</span>
+                    <button
+                      type="button"
+                      className="remove-file-btn"
                       onClick={() => removeFile(index)}
+                      aria-label={`Remove ${file.name}`}
                     >
-                      Remove
+                      &times; {}
                     </button>
                   </li>
                 ))}
               </ul>
             </div>
           )}
-          
+
           <div className="form-group">
-            <label htmlFor="message">Additional Instructions</label>
-            <textarea 
-              id="message" 
-              value={message} 
-              onChange={(e) => setMessage(e.target.value)} 
-              placeholder="Please provide any specific instructions or details about your project..."
+            <label htmlFor="message">Additional Instructions / File Link</label>
+            <textarea
+              id="message"
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Provide specific instructions, reference track info, or a link to your files (WeTransfer, Dropbox, Google Drive)..."
               rows={5}
             />
           </div>
-          
-          <button 
-            type="submit" 
-            className="submit-btn" 
-            disabled={isSubmitting}
+
+          <button
+            type="submit"
+            className="submit-btn"
+            disabled={isSubmitting || !selectedTier} // Also disable if no tier selected
+            aria-disabled={isSubmitting || !selectedTier}
           >
             {isSubmitting ? 'Submitting...' : 'Submit Request'}
           </button>
-          
+
           {submitMessage && (
-            <div className={`submit-message ${submitMessage.includes('successfully') ? 'success' : 'error'}`}>
+            <div role="alert" className={`submit-message ${submitMessage.includes('successfully') ? 'success' : submitMessage.includes('Please select') ? 'info' : 'error'}`}>
               {submitMessage}
             </div>
           )}
         </form>
       </section>
 
+      {/* --- FAQ Section remains the same --- */}
       <section className="faq-section">
         <h3>Frequently Asked Questions</h3>
         <div className="faq-items">
+          {/* Consider adding a FAQ specific to Vocal Splitting */}
+          <div className="faq-item">
+            <h4>What is Vocal Splitting?</h4>
+            <p>
+              Vocal Splitting uses advanced algorithms to separate the vocal track from a finished stereo mix, providing you with an acapella and an instrumental version. This is useful for remixes, karaoke tracks, or sampling. The quality can vary depending on the complexity of the original mix.
+            </p>
+          </div>
           <div className="faq-item">
             <h4>What's the difference between mixing and mastering?</h4>
             <p>
-              Mixing involves balancing individual tracks, applying effects, and creating a cohesive sound. 
+              Mixing involves balancing individual tracks, applying effects, and creating a cohesive sound.
               Mastering is the final polish applied to the entire mix, ensuring it sounds consistent across all playback systems.
             </p>
           </div>
-          
+
           <div className="faq-item">
             <h4>How should I prepare my files?</h4>
             <p>
-              Export each track as individual WAV or AIFF files (24-bit, 44.1kHz or higher). 
-              Ensure all tracks start at the same point and include any effects that are essential to the sound.
+              For Mixing/Mastering: Export each track as individual WAV or AIFF files (24-bit, 44.1kHz+), starting from the beginning of the song. Remove unnecessary effects unless crucial to the sound. Label tracks clearly.
+              For Vocal Splitting: Provide the highest quality version of the final stereo mix you have (WAV, AIFF, or 320kbps MP3).
             </p>
           </div>
-          
+
           <div className="faq-item">
             <h4>How many revisions do I get?</h4>
             <p>
-              The number of revisions depends on your selected tier. Basic includes 2 revisions, 
-              Standard includes 3 revisions, and Premium includes unlimited revisions.
+              Revisions vary by tier: Basic (2), Standard (3), Premium (Unlimited), Vocal Production (2), Vocal Splitting (1 for artifact review). Revisions cover adjustments based on your feedback, not fundamental changes to the source material.
             </p>
           </div>
-          
+
           <div className="faq-item">
             <h4>What if I'm not satisfied with the result?</h4>
             <p>
-              Your satisfaction is our priority. If you're not happy with the result, we'll work with you 
-              to address your concerns within the revision limits of your selected tier.
+              Your satisfaction is our priority. We'll use the included revisions to address your feedback. For Vocal Splitting, please note that the technology has limitations based on the source audio.
             </p>
           </div>
-          
+
           <div className="faq-item">
             <h4>How do I receive my files?</h4>
             <p>
-              Once your project is complete, you'll receive a download link via email with your 
+              Once your project is complete, you'll receive a download link via email with your
               final files in the formats included in your selected tier.
             </p>
           </div>
