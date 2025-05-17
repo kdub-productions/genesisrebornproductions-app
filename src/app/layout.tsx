@@ -26,12 +26,23 @@ export default function RootLayout({
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4585137285765836"
           crossOrigin="anonymous"
         />
+        <script 
+          async 
+          custom-element="amp-auto-ads"
+          src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
+        />
       </head>
       <body className={inter.className}>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: '<amp-auto-ads type="adsense" data-ad-client="ca-pub-4585137285765836"></amp-auto-ads>'
+          }}
+        />
         {children}
         <SpeedInsights /> {/* Ensure SpeedInsights component is used */}
         <Analytics /> {/* Ensure Analytics component is used */}
       </body>
+      
     </html>
   );
 }
