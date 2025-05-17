@@ -16,7 +16,7 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
-  const [saleActive,] = useState(true);
+  const [saleActive,] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
