@@ -54,7 +54,6 @@
     --radius-full: 9999px;
   }
   
-  /* Base Styles */
   body {
     background: linear-gradient(135deg, var(--light) 0%, var(--gray-100) 60%, var(--gray-200) 100%);
     color: var(--gray-900);
@@ -67,7 +66,6 @@
     font-weight: 400;
   }
   
-  /* Layout */
   .page-container {
     display: flex;
     flex-direction: column;
@@ -85,7 +83,6 @@
     box-sizing: border-box;
   }
   
-  /* Typography */
   h1, h2, h3, h4, h5, h6 {
     font-weight: 700;
     line-height: 1.2;
@@ -116,7 +113,6 @@
     50% { opacity: 1; box-shadow: 0 2px 20px rgba(0, 247, 255, 0.5); }
   }
   
-  /* Navbar */
   .navbar {
     display: flex;
     justify-content: space-between;
@@ -280,7 +276,6 @@
     color: var(--primary);
   }
   
-  /* Mobile Navbar */
   .mobile-navbar {
     width: 100%;
     background: linear-gradient(135deg, rgba(102, 0, 255, 0.95) 0%, rgba(65, 105, 225, 0.9) 50%, rgba(102, 0, 255, 0.85) 100%);
@@ -443,13 +438,12 @@
     transform: translateY(-0.125rem);
   }
   
-  /* Footer */
   .footer {
     background: linear-gradient(to bottom, rgba(15, 23, 42, 0.85), rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.95));
     color: var(--gray-300);
     padding: var(--space-xl) var(--space-md);
     backdrop-filter: blur(8px);
-    transition: background 0.3s ease-in-out;
+    transition: -background 0.3s ease-in-out;
   }
   
   .footer-div {
@@ -492,7 +486,6 @@
     color: var(--primary-light);
   }
   
-  /* Responsive */
   @media (max-width: 768px) {
     .nav-links {
       display: none;
@@ -526,7 +519,6 @@
     }
   }
   
-  /* Sticky Menu Content */
   .sticky-menu-content {
     position: fixed;
     top: 0;

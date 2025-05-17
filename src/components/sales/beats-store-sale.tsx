@@ -14,10 +14,9 @@ interface BeatStoreSaleProps {
 const BeatStoreSale: React.FC<BeatStoreSaleProps> = ({
   originalPrice,
   license,
-  discountPercentage = 50, // Default to 50% off
+  discountPercentage = 50,
   showBadge = true,
 }) => {
-  // Calculate the discounted price
   const discountMultiplier = (100 - discountPercentage) / 100;
   const discountedPrice = originalPrice * discountMultiplier;
   

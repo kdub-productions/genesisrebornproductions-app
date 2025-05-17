@@ -82,7 +82,7 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       ]
     },
     {
-      id: 'vocal-prod', // Changed ID to be unique
+      id: 'vocal-prod', 
       name: 'Vocal Production',
       price: '$100',
       turnaround: '3-5 days',
@@ -100,10 +100,10 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
     {
       id: 'vocal-splitting', 
       name: 'Vocal Splitting',
-      price: '$300', // Kept the higher price
-      turnaround: '10-15 days', // Kept the longer turnaround
-      description: 'Advanced AI-powered service to isolate vocals from a mixed track for remixing, karaoke, or archival purposes.', // Updated description
-      features: [ // Updated features relevant to vocal splitting
+      price: '$300', 
+      turnaround: '10-15 days', 
+      description: 'Advanced AI-powered service to isolate vocals from a mixed track for remixing, karaoke, or archival purposes.',
+      features: [
         'High-quality vocal stem isolation from stereo mix',
         'Instrumental track generation (minus vocals)',
         'Delivery of separated vocal and instrumental WAV files',
@@ -114,18 +114,13 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       ]
     },
   ];
-  // --- END of UPDATED serviceTiers Array ---
 
   const handleTierSelect = (tierId: string) => {
     setSelectedTier(tierId);
-    // Show a brief confirmation message
     const tierName = serviceTiers.find(tier => tier.id === tierId)?.name;
     setSubmitMessage(`You selected: ${tierName}. Please complete the form below.`);
-    // Scroll to the form section
     document.getElementById('upload-section')?.scrollIntoView({ behavior: 'smooth' });
-    // Clear the message after 5 seconds
     setTimeout(() => {
-      // Check if the current message is still the selection confirmation before clearing
       if (submitMessage.startsWith(`You selected: ${tierName}`)) {
         setSubmitMessage('');
       }
@@ -135,7 +130,6 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      // Limit total files if needed, or check total size
       setFiles(prev => [...prev, ...newFiles]);
     }
   };
@@ -152,8 +146,6 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       return;
     }
 
-    // For Vocal Splitting, usually only one source file is needed.
-    // You might want specific validation here if needed.
     if (files.length === 0) {
       setSubmitMessage('Please upload at least one file');
       return;
@@ -170,7 +162,6 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       formData.append('selectedTier', selectedTierName);
       formData.append('message', message);
 
-      // Append each file to the FormData
       files.forEach(file => {
         formData.append('files', file);
       });
@@ -184,14 +175,13 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
 
       if (response.ok && result.success) {
         setSubmitMessage('Your request has been submitted successfully! We will contact you shortly.');
-        // Reset form
         setFiles([]);
         setName('');
         setEmail('');
         setMessage('');
         setSelectedTier(null);
         if (fileInputRef.current) {
-          fileInputRef.current.value = ''; // Clear the file input visually
+          fileInputRef.current.value = '';
         }
       } else {
         setSubmitMessage(`Error: ${result.error || 'Failed to submit request. Please try again.'}`);
@@ -210,7 +200,7 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
         {saleActive && (
           <div className="store-wide-sale-banner">
             <h2>50% OFF ALL MIXING & MASTERING SERVICES!</h2>
-            <p>(Discount applied automatically at invoice)</p> {/* Clarify how discount works */}
+            <p>(Discount applied automatically at invoice)</p> 
           </div>
         )}
         <h2>Professional Mixing & Mastering Services</h2>
@@ -252,7 +242,7 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
               aria-pressed={selectedTier === tier.id}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleTierSelect(tier.id); }} // Added keyboard accessibility
             >
-              {/* Keep MOST POPULAR badge logic or adjust if needed */}
+              
               <div className="tier-badge">{tier.id === 'standard' ? 'MOST POPULAR' : ''}</div>
               <h4>{tier.name}</h4>
               <div className="tier-price">
@@ -306,7 +296,6 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
         </div>
 
         <form onSubmit={handleSubmit} className="upload-form">
-          {/* --- Form fields remain the same --- */}
           <div className="form-group">
             <label htmlFor="name">Name</label>
             <input

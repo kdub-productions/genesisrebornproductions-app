@@ -1,7 +1,6 @@
 "use client";
 import { useState, useEffect, Suspense, lazy } from 'react';
 import Navbar from "@/components/navbar";
-// Import VideoGrid lazily for code splitting
 const VideoGrid = lazy(() => import("@/components/VideoGrid"));
 import Footer from "@/components/footer";
 import Loading from "@/components/loading";
@@ -11,8 +10,7 @@ export default function Home() {
 
   useEffect(() => {
     console.log("Initial loading state:", loading);
-    // Loading state now fully controlled by VideoGrid component
-    return () => setLoading(true); // Reset on unmount
+    return () => setLoading(true);
   }, []);
 
   return (

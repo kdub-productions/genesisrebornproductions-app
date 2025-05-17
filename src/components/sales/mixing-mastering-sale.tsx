@@ -11,7 +11,7 @@ const MixingMasteringSale: React.FC<MixingMasteringSaleProps> = ({
   originalPrice,
   serviceName
 }) => {
-  const discountedPrice = originalPrice * 0.5; // Fixed 50% discount
+  const discountedPrice = originalPrice * 0.5;
 
   return (
     <div className="beat-sale-container">
