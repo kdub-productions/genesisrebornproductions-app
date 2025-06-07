@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import '@/styles/Homepage-styles/videoGrid.css';
+
 const apiKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 const channelId = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID;
 const videosPerPage = 12;
@@ -16,15 +17,6 @@ interface VideoGridProps {
   setLoading: (loading: boolean) => void;
 }
 
-// Add this function at the top of the file, after the interfaces
-function decodeHTMLEntities(text: string) {
-  const textarea = document.createElement('textarea');
-  textarea.innerHTML = text;
-  const decodedText = textarea.value;
-  textarea.remove(); // Clean up
-  return decodedText;
-}
-
 const VideoGrid = ({ setLoading }: VideoGridProps) => {
   const [videos, setVideos] = useState<Video[]>([]);
   const [nextPageToken, setNextPageToken] = useState<string>('');
@@ -32,114 +24,61 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageTokens, setPageTokens] = useState<{[key: number]: string}>({1: ''});
 
-  useEffect(() => {
-    // Check if cache exists and is still valid
-    const cachedData = localStorage.getItem('videoGridData');
-    if (cachedData) {
-      try {
-        const parsedData = JSON.parse(cachedData);
-        const cacheTimestamp = parsedData.timestamp || 0;
-        const cacheExpiration = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
-        
-        // If cache is still valid (less than 24 hours old)
-        if (Date.now() - cacheTimestamp < cacheExpiration) {
-          console.log("Using cached video data");
-          setVideos(parsedData.videos || []);
-          setCurrentPage(parsedData.currentPage || 1);
-          setNextPageToken(parsedData.nextPageToken || '');
-          setPrevPageToken(parsedData.prevPageToken || '');
-          setPageTokens(parsedData.pageTokens || {1: ''});
-          setLoading(false);
-          return;
-        } else {
-          console.log("Cache expired, fetching fresh data");
-        }
-      } catch (error) {
-        console.error("Error parsing cache:", error);
-      }
-    }
-    
-    useEffect(() => {
-      // Clear existing cache to ensure new ordering takes effect
-      localStorage.removeItem('videoGridData');
-      setCurrentPage(1);
-      fetchVideos();
-    }, [setLoading]);
-  }, [setLoading]);
-
-  async function fetchVideos(pageToken = '', direction: 'next' | 'prev' = 'next') {
+  const fetchVideos = useCallback(async (pageToken = '', direction: 'next' | 'prev' = 'next') => {
     setLoading(true);
-    console.log("Fetching videos...");
     
     const targetPage = direction === 'next' 
       ? (pageToken ? currentPage + 1 : 1) 
       : Math.max(1, currentPage - 1);
 
-    const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&maxResults=${videosPerPage}&pageToken=${pageToken}&order=date&fields=items(id/videoId,snippet(title,thumbnails/medium,publishedAt)),nextPageToken,prevPageToken`;
-
     try {
+      const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&maxResults=${videosPerPage}&pageToken=${pageToken}&order=date`;
       const response = await fetch(url);
+      
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       const data = await response.json();
-      console.log("Data fetched:", data);
 
       if (data.error) {
         console.error("API Error:", data.error.message);
-        alert("An error occurred: " + data.error.message);
         return;
       }
 
-      // Sort videos by publishedAt date
-      const fetchedVideos = data.items
-        .sort((a: any, b: any) => {
-          return new Date(b.snippet.publishedAt).getTime() - new Date(a.snippet.publishedAt).getTime();
-        })
-        .map((item: any) => ({
-          src: `https://www.youtube.com/embed/${item.id.videoId}`,
-          title: decodeHTMLEntities(item.snippet.title),
-          thumbnail: item.snippet.thumbnails.medium.url,
-          publishedAt: item.snippet.publishedAt
-        }));
+      const fetchedVideos = data.items.map((item: any) => ({
+        src: `https://www.youtube.com/embed/${item.id.videoId}`,
+        title: item.snippet.title,
+        thumbnail: item.snippet.thumbnails.medium.url,
+      }));
 
       setVideos(fetchedVideos);
       setCurrentPage(targetPage);
       setNextPageToken(data.nextPageToken || '');
       setPrevPageToken(data.prevPageToken || '');
       
-      // Update page tokens mapping
       const newPageTokens = {...pageTokens};
       newPageTokens[targetPage] = pageToken;
       if (data.nextPageToken) newPageTokens[targetPage + 1] = data.nextPageToken;
       if (data.prevPageToken) newPageTokens[targetPage - 1] = data.prevPageToken;
       setPageTokens(newPageTokens);
 
-      // Update cache with new data
-      const cacheData = {
-        videos: fetchedVideos,
-        nextPageToken: data.nextPageToken || '',
-        prevPageToken: data.prevPageToken || '',
-        currentPage: targetPage,
-        pageTokens: newPageTokens,
-        timestamp: Date.now()
-      };
-      localStorage.setItem('videoGridData', JSON.stringify(cacheData));
-
     } catch (error) {
       console.error("Fetch Error:", error);
-      alert("Failed to fetch videos. Please check your network or API key.");
     } finally {
       setLoading(false);
     }
-  }
+  }, [currentPage, pageTokens, setLoading]);
+
+  useEffect(() => {
+    fetchVideos();
+  }, [fetchVideos]);
 
   return (
     <div>
       <div id="video-grid" className="video-grid-container">
         {videos.map((video, index) => (
-          <div key={index} className="video-card">
+          <div key={`video-${index}-${currentPage}`} className="video-card">
             <div className="thumbnail-container">
               <img 
                 src={video.thumbnail} 
@@ -148,43 +87,12 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
                 width="480"
                 height="360"
                 className="thumbnail-image" 
-                onError={(e) => {
-                  console.error('Error loading thumbnail:', e);
-                  e.currentTarget.src = '/images/fallback-thumbnail.jpg';
-                }}
               />
-              {/* Only create iframe when needed instead of preloading all iframes */}
               <div className="iframe-container"></div>
             </div>
             <div className="video-details">
               <h3 className="video-title">{video.title}</h3>
-              <button 
-                className="play-button"
-                onClick={(e) => {
-                  const parent = (e.target as HTMLElement).closest('.video-card');
-                  const iframeContainer = parent?.querySelector('.iframe-container');
-                  const img = parent?.querySelector('img');
-                  const playButton = parent?.querySelector('.play-button');
-                  
-                  if (iframeContainer && img && playButton) {
-                    // Create iframe only when user clicks play
-                    const iframe = document.createElement('iframe');
-                    iframe.src = `${video.src}?autoplay=1&rel=0&showinfo=0&controls=1`;
-                    iframe.allowFullscreen = true;
-                    iframe.allow = "autoplay";
-                    iframe.className = "video-iframe iframe-visible";
-                    iframe.title = video.title;
-                    
-                    // Clear container and add the iframe
-                    iframeContainer.innerHTML = '';
-                    iframeContainer.appendChild(iframe);
-                    
-                    // Hide thumbnail and play button
-                    img.style.display = 'none';
-                    (playButton as HTMLElement).style.display = 'none';
-                  }
-                }}
-              >
+              <button className="play-button">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5v14l11-7z"/>
                 </svg>
@@ -197,7 +105,7 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
         <button 
           className="pagination-button prev-button"
           onClick={() => fetchVideos(prevPageToken, 'prev')} 
-          disabled={!prevPageToken}
+          disabled={currentPage <= 1}
         >
           Previous
         </button>
