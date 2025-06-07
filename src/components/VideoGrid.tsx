@@ -23,6 +23,7 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
   const [prevPageToken, setPrevPageToken] = useState<string>('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageTokens, setPageTokens] = useState<{[key: number]: string}>({1: ''});
+  const [activeVideo, setActiveVideo] = useState<number | null>(null);
 
   const fetchVideos = useCallback(async (pageToken = '', direction: 'next' | 'prev' = 'next') => {
     setLoading(true);
@@ -56,6 +57,7 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
       setCurrentPage(targetPage);
       setNextPageToken(data.nextPageToken || '');
       setPrevPageToken(data.prevPageToken || '');
+      setActiveVideo(null);
       
       const newPageTokens = {...pageTokens};
       newPageTokens[targetPage] = pageToken;
@@ -74,6 +76,10 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
     fetchVideos();
   }, [fetchVideos]);
 
+  const handleVideoClick = (index: number) => {
+    setActiveVideo(activeVideo === index ? null : index);
+  };
+
   return (
     <div>
       <div id="video-grid" className="video-grid-container">
@@ -86,13 +92,26 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
                 loading="lazy"
                 width="480"
                 height="360"
-                className="thumbnail-image" 
+                className={`thumbnail-image ${activeVideo === index ? 'hidden' : ''}`}
               />
-              <div className="iframe-container"></div>
+              <div className={`iframe-container ${activeVideo === index ? 'iframe-visible' : ''}`}>
+                {activeVideo === index && (
+                  <iframe
+                    src={`${video.src}?autoplay=1`}
+                    title={video.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="video-iframe iframe-visible"
+                  />
+                )}
+              </div>
             </div>
             <div className="video-details">
               <h3 className="video-title">{video.title}</h3>
-              <button className="play-button">
+              <button 
+                className="play-button"
+                onClick={() => handleVideoClick(index)}
+              >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5v14l11-7z"/>
                 </svg>
