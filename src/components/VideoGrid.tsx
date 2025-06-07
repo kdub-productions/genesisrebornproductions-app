@@ -59,43 +59,23 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
       }
     }
     
-    setCurrentPage(1); // Reset to page 1 on initial load
-    fetchVideos();
+    useEffect(() => {
+      // Clear existing cache to ensure new ordering takes effect
+      localStorage.removeItem('videoGridData');
+      setCurrentPage(1);
+      fetchVideos();
+    }, [setLoading]);
   }, [setLoading]);
 
   async function fetchVideos(pageToken = '', direction: 'next' | 'prev' = 'next') {
     setLoading(true);
     console.log("Fetching videos...");
     
-    // Fix page calculation
     const targetPage = direction === 'next' 
       ? (pageToken ? currentPage + 1 : 1) 
-      : currentPage - 1;
-    
-    // Check if we already have the videos for this page in cache
-    const cachedData = localStorage.getItem('videoGridData');
-    if (cachedData) {
-      try {
-        const parsedData = JSON.parse(cachedData);
-        const pageVideos = parsedData.pageVideos || {};
-        const storedPageTokens = parsedData.pageTokens || {};
-        
-        // If we have cached videos for the target page and its token matches
-        if (pageVideos[targetPage] && storedPageTokens[targetPage] === pageToken) {
-          console.log("Using cached page data");
-          setVideos(pageVideos[targetPage]);
-          setCurrentPage(targetPage);
-          setNextPageToken(storedPageTokens[targetPage + 1] || '');
-          setPrevPageToken(storedPageTokens[targetPage - 1] || '');
-          setLoading(false);
-          return;
-        }
-      } catch (error) {
-        console.error("Error parsing cache:", error);
-      }
-    }
+      : Math.max(1, currentPage - 1);
 
-    const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&maxResults=${videosPerPage}&pageToken=${pageToken}`;
+    const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&maxResults=${videosPerPage}&pageToken=${pageToken}&order=date&fields=items(id/videoId,snippet(title,thumbnails/medium,publishedAt)),nextPageToken,prevPageToken`;
 
     try {
       const response = await fetch(url);
@@ -112,14 +92,22 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
         return;
       }
 
-      const fetchedVideos = data.items.map((item: any) => ({
-        src: `https://www.youtube.com/embed/${item.id.videoId}`,
-        title: decodeHTMLEntities(item.snippet.title),
-        thumbnail: item.snippet.thumbnails.medium.url,
-      }));
+      // Sort videos by publishedAt date
+      const fetchedVideos = data.items
+        .sort((a: any, b: any) => {
+          return new Date(b.snippet.publishedAt).getTime() - new Date(a.snippet.publishedAt).getTime();
+        })
+        .map((item: any) => ({
+          src: `https://www.youtube.com/embed/${item.id.videoId}`,
+          title: decodeHTMLEntities(item.snippet.title),
+          thumbnail: item.snippet.thumbnails.medium.url,
+          publishedAt: item.snippet.publishedAt
+        }));
 
       setVideos(fetchedVideos);
       setCurrentPage(targetPage);
+      setNextPageToken(data.nextPageToken || '');
+      setPrevPageToken(data.prevPageToken || '');
       
       // Update page tokens mapping
       const newPageTokens = {...pageTokens};
@@ -128,33 +116,22 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
       if (data.prevPageToken) newPageTokens[targetPage - 1] = data.prevPageToken;
       setPageTokens(newPageTokens);
 
-      // Cache the current state
-      const existingCache = localStorage.getItem('videoGridData');
-      const existingPageVideos = existingCache ? JSON.parse(existingCache).pageVideos || {} : {};
-      
+      // Update cache with new data
       const cacheData = {
         videos: fetchedVideos,
         nextPageToken: data.nextPageToken || '',
         prevPageToken: data.prevPageToken || '',
         currentPage: targetPage,
         pageTokens: newPageTokens,
-        pageVideos: {
-          ...existingPageVideos,
-          [targetPage]: fetchedVideos
-        },
-        timestamp: Date.now() // Add timestamp for cache expiration
+        timestamp: Date.now()
       };
       localStorage.setItem('videoGridData', JSON.stringify(cacheData));
-      
-      setNextPageToken(data.nextPageToken || '');
-      setPrevPageToken(data.prevPageToken || '');
-      console.log("Videos set:", fetchedVideos);
+
     } catch (error) {
       console.error("Fetch Error:", error);
       alert("Failed to fetch videos. Please check your network or API key.");
     } finally {
       setLoading(false);
-      console.log("Loading set to false");
     }
   }
 
