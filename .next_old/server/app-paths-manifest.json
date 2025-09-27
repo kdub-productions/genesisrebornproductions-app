@@ -1,0 +1,19 @@
+{
+  "/api/email/confirmation/route": "app/api/email/confirmation/route.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/api/socialmedia/route": "app/api/socialmedia/route.js",
+  "/api/beats/route": "app/api/beats/route.js",
+  "/api/email/route": "app/api/email/route.js",
+  "/api/stripe/create-checkout-session/route": "app/api/stripe/create-checkout-session/route.js",
+  "/aboutus/page": "app/aboutus/page.js",
+  "/lyrics/page": "app/lyrics/page.js",
+  "/api/stripe/create-payment-intent/route": "app/api/stripe/create-payment-intent/route.js",
+  "/beatsforsale/page": "app/beatsforsale/page.js",
+  "/termsofservice/page": "app/termsofservice/page.js",
+  "/socialmediapage/page": "app/socialmediapage/page.js",
+  "/page": "app/page.js",
+  "/mixingandmastering/page": "app/mixingandmastering/page.js",
+  "/privacy/page": "app/privacy/page.js",
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/api/email/mixing-request/route": "app/api/email/mixing-request/route.js"
+}
