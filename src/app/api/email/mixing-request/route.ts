@@ -5,8 +5,6 @@ import { Resend } from 'resend';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
 export async function POST(request: NextRequest) {
   try {
     // Ensure Resend API key is configured
@@ -14,6 +12,8 @@ export async function POST(request: NextRequest) {
       console.error('Resend API key is not configured. RESEND_API_KEY is missing.');
       return NextResponse.json({ error: 'Resend API key not configured on server' }, { status: 500 });
     }
+
+    const resend = new Resend(process.env.RESEND_API_KEY);
     const formData = await request.formData();
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
