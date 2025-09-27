@@ -26,8 +26,12 @@ export default function RootLayout({
         <div id="ads-root" />
         {/* CookieConsent and AdsLoader are client components; they will be dynamically imported by pages that need them. */}
         {children}
-        <SpeedInsights /> {/* Ensure SpeedInsights component is used */}
-        <Analytics /> {/* Ensure Analytics component is used */}
+        {process.env.NODE_ENV === 'production' && (
+          <>
+            <SpeedInsights /> {/* Ensure SpeedInsights component is used */}
+            <Analytics /> {/* Ensure Analytics component is used */}
+          </>
+        )}
       </body>
       
     </html>
