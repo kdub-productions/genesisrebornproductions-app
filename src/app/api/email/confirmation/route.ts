@@ -1,22 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-// Create a transporter object using the default SMTP transport
-const transporter = nodemailer.createTransport({
+const createTransporter = () => nodemailer.createTransport({
   service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_APP_PASSWORD,
   },
-});
-
-// Verify the transporter connection
-transporter.verify(function(error, success) {
-  if (error) {
-    console.error('SMTP connection error:', error);
-  } else {
-    console.log('SMTP server is ready to take our messages');
-  }
 });
 
 export async function POST(request: NextRequest) {
@@ -62,7 +52,8 @@ const name = firstName && lastName ? `${firstName} ${lastName}` : email;
       `,
     };
 
-    // Send both emails concurrently
+    // Send both emails concurrently using a runtime-created transporter
+    const transporter = createTransporter();
     await Promise.all([
       transporter.sendMail(customerMailOptions),
       transporter.sendMail(adminMailOptions),

@@ -93,7 +93,13 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
       <div id="video-grid" className="video-grid-container">
         {videos.map((video, index) => (
           <div key={`video-${index}-${currentPage}`} className="video-card">
-            <div className="thumbnail-container">
+            <div
+              className="thumbnail-container"
+              role="button"
+              tabIndex={0}
+              onClick={() => handleVideoClick(index)}
+              onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleVideoClick(index); } }}
+            >
               <img 
                 src={video.thumbnail} 
                 alt={video.title} 
@@ -113,17 +119,19 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
                   />
                 )}
               </div>
-            </div>
-            <div className="video-details">
-              <h3 className="video-title">{video.title}</h3>
               <button 
                 className="play-button"
-                onClick={() => handleVideoClick(index)}
+                aria-label={`Play ${video.title}`}
+                onClick={(e) => { e.stopPropagation(); handleVideoClick(index); }}
+                tabIndex={-1}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5v14l11-7z"/>
                 </svg>
               </button>
+            </div>
+            <div className="video-details">
+              <h3 className="video-title">{video.title}</h3>
             </div>
           </div>
         ))}

@@ -12,7 +12,7 @@ import nodemailer from 'nodemailer';
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const transporter = nodemailer.createTransport({
+const createTransporter = () => nodemailer.createTransport({
   service: 'gmail',
   host: 'smtp.gmail.com',
   port: 465,
@@ -22,9 +22,7 @@ const transporter = nodemailer.createTransport({
     pass: process.env.EMAIL_APP_PASSWORD
   },
   debug: true,
-  tls: {
-    rejectUnauthorized: false
-  }
+  tls: { rejectUnauthorized: false }
 });
 
 export async function POST(request: NextRequest) {
@@ -72,7 +70,8 @@ export async function POST(request: NextRequest) {
       replyTo: email
     };
 
-    await transporter.sendMail(mailOptions);
+  const transporter = createTransporter();
+  await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ success: true });
   } catch (error) {

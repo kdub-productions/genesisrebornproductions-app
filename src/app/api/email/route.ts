@@ -1,30 +1,27 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 
-// Create a transporter object using SMTP transport with app password
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER || 'genesisrebornproductions@gmail.com',
-    pass: process.env.EMAIL_APP_PASSWORD
-  },
-  debug: true,
-  tls: {
-    rejectUnauthorized: false
-  }
-});
+const createTransporter = () => {
+  return nodemailer.createTransport({
+    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: {
+      user: process.env.EMAIL_USER || 'genesisrebornproductions@gmail.com',
+      pass: process.env.EMAIL_APP_PASSWORD
+    },
+    debug: true,
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+};
 
 // Verify the transporter connection
-transporter.verify(function(error, success) {
-  if (error) {
-    console.error('SMTP connection error:', error);
-  } else {
-    console.log('SMTP server is ready to take our messages');
-  }
-});
+// Note: avoid verifying SMTP connection at module load time to prevent
+// build-time connection attempts. Verification will be performed at runtime
+// when sending messages (if desired) or by health checks.
 
 export async function POST(request: NextRequest) {
   try {
@@ -58,8 +55,9 @@ export async function POST(request: NextRequest) {
       replyTo: email
     };
 
-    // Send email
-    await transporter.sendMail(mailOptions);
+  // Create transporter at runtime and send email
+  const transporter = createTransporter();
+  await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ success: true });
   } catch (error) {

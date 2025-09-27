@@ -48,12 +48,7 @@ export default function MobileNavbar() {
             <li><Link href="/mixingandmastering">Mixing/Mastering</Link></li>
             <li><Link href="/aboutus">About</Link></li>
             <li>
-              <form action="mailto:genesisrebornproductions@gmail.com" method="post" encType="text/plain">
-                <input type="text" name="name" placeholder="Your Name" required />
-<input type="email" name="email" placeholder="Your Email" required />
-                <textarea name="message" placeholder="Your Message" rows={4} required></textarea>
-                <button type="submit">Send</button>
-              </form>
+                <ContactForm />
             </li>
           </ul>
         </div>
@@ -61,3 +56,43 @@ export default function MobileNavbar() {
     </div>
   );
 }
+
+  function ContactForm() {
+    const [name, setName] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [message, setMessage] = React.useState('');
+    const [status, setStatus] = React.useState<string | null>(null);
+
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setStatus('sending');
+      try {
+        const res = await fetch('/api/email/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, message })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          setStatus('sent');
+          setName(''); setEmail(''); setMessage('');
+        } else {
+          setStatus(data.error || 'error');
+        }
+      } catch (err) {
+        setStatus('error');
+      }
+    };
+
+    return (
+      <form onSubmit={handleSubmit} className="contact-form">
+        <input value={name} onChange={(e) => setName(e.target.value)} type="text" name="name" placeholder="Your Name" required />
+        <input value={email} onChange={(e) => setEmail(e.target.value)} type="email" name="email" placeholder="Your Email" required />
+        <textarea value={message} onChange={(e) => setMessage(e.target.value)} name="message" placeholder="Your Message" rows={4} required></textarea>
+        <button type="submit">Send</button>
+        {status === 'sending' && <div className="contact-status">Sending...</div>}
+        {status === 'sent' && <div className="contact-status success">Sent — thanks!</div>}
+        {status && status !== 'sending' && status !== 'sent' && <div className="contact-status error">Error: {status}</div>}
+      </form>
+    );
+  }
