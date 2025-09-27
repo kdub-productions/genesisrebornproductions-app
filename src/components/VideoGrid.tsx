@@ -3,8 +3,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import '@/styles/Homepage-styles/videoGrid.css';
 
-const apiKey = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
-const channelId = process.env.NEXT_PUBLIC_YOUTUBE_CHANNEL_ID;
 const videosPerPage = 12;
 
 interface Video {
@@ -51,21 +49,25 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
         const data = await response.json();
 
         const fetchedVideos = (data.items || []).map((item: any) => {
-          const vid = item.videoId;
-          // prefer provided thumbnail, otherwise fall back to YouTube default thumbnail
+          const vid = item.videoId || null;
+          const rawTitle = item.title || '';
+          const title = String(rawTitle).replace(/<[^>]+>/g, '').trim() || 'Untitled video';
+          // Prefer provided thumbnail, otherwise fall back to YouTube default thumbnail when we have a video id
           const thumb = item.thumbnail || (vid ? `https://i.ytimg.com/vi/${vid}/hqdefault.jpg` : null);
-          const title = item.title || 'Untitled video';
           return {
-            src: `https://www.youtube.com/embed/${vid}`,
+            src: vid ? `https://www.youtube.com/embed/${vid}` : '',
             title,
             thumbnail: thumb,
             videoId: vid,
           };
-        });
+        }).filter((v: any) => !!v.videoId); // drop entries without a valid videoId
 
         if (!fetchedVideos || fetchedVideos.length === 0) {
           setVideos([]);
           setError('No videos returned from the YouTube API.');
+        } else if (fetchedVideos.length === 0) {
+          setVideos([]);
+          setError('No valid videos found (no video IDs).');
         } else {
           setVideos(fetchedVideos);
           setError(null);

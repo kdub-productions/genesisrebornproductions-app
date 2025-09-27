@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import CookieConsent from './CookieConsent';
 
 const CONSENT_KEY = 'grps_cookie_consent_v1';
@@ -21,6 +21,7 @@ function injectScript(src: string, attrs: Record<string,string|boolean> = {}) {
 
 export default function AdsLoader() {
   const [consent, setConsent] = useState<boolean | null>(null);
+  const injectedRef = useRef(false);
 
   useEffect(() => {
     if (process.env.NODE_ENV !== 'production') {
@@ -42,17 +43,25 @@ export default function AdsLoader() {
 
   useEffect(() => {
     if (consent) {
-      // Only inject AdSense script if there is an ad slot present in the DOM to avoid 'no_div' errors
-      const wrapper = document.getElementById('ads-root') || document.body;
-      const hasSlot = !!document.querySelector('ins.adsbygoogle');
-      if (!hasSlot) {
-        // No ad slot on the page; don't inject AdSense script. This avoids the "no_div" errors and reduces tracking-prevention noise.
-        console.info('AdsLoader: no ins.adsbygoogle slot found; skipping ad script injection.');
-        return;
-      }
+      // Don't inject more than once
+      if (injectedRef.current) return;
 
-      // Inject AdSense script only (avoid AMP auto-ads which can cause attestation/no_div errors and tracking-prevention noise)
-      injectScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4585137285765836', { crossOrigin: 'anonymous' });
+      // Poll briefly for an ad slot to appear. Some pages render ad slots after hydration.
+      const maxAttempts = 5;
+      let attempts = 0;
+      const interval = setInterval(() => {
+        attempts += 1;
+        const hasSlot = !!document.querySelector('ins.adsbygoogle');
+        if (hasSlot) {
+          injectedRef.current = true;
+          injectScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4585137285765836', { crossOrigin: 'anonymous' });
+          clearInterval(interval);
+        } else if (attempts >= maxAttempts) {
+          // Give up after a few tries to avoid long-running polling
+          console.info('AdsLoader: no ins.adsbygoogle slot found after polling; skipping ad script injection.');
+          clearInterval(interval);
+        }
+      }, 250);
     }
   }, [consent]);
 
