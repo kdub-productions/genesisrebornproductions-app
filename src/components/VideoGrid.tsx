@@ -32,34 +32,23 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
       ? (pageToken ? currentPage + 1 : 1) 
       : Math.max(1, currentPage - 1);
 
-    try {
-      if (!apiKey || !channelId) {
-        console.warn('YouTube API key or Channel ID is missing. Skipping fetch.');
-        setVideos([]);
-        setNextPageToken('');
-        setPrevPageToken('');
-        setLoading(false);
-        return;
-      }
-      const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&maxResults=${videosPerPage}&pageToken=${pageToken}&order=date`;
-      const response = await fetch(url);
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      try {
+        // Call server-side proxy so the API key is not exposed to the client and to avoid CORS/403 issues
+        const proxyUrl = `/api/youtube/search?maxResults=${videosPerPage}&pageToken=${encodeURIComponent(pageToken)}&order=date`;
+        const response = await fetch(proxyUrl);
 
-      const data = await response.json();
+        if (!response.ok) {
+          const err = await response.json().catch(() => ({}));
+          throw new Error(`HTTP error! status: ${response.status} ${err?.message || ''}`);
+        }
 
-      if (data.error) {
-        console.error("API Error:", data.error.message);
-        return;
-      }
+        const data = await response.json();
 
-      const fetchedVideos = data.items.map((item: any) => ({
-        src: `https://www.youtube.com/embed/${item.id.videoId}`,
-        title: item.snippet.title,
-        thumbnail: item.snippet.thumbnails.medium.url,
-      }));
+        const fetchedVideos = (data.items || []).map((item: any) => ({
+          src: `https://www.youtube.com/embed/${item.videoId}`,
+          title: item.title,
+          thumbnail: item.thumbnail,
+        }));
 
       setVideos(fetchedVideos);
       setCurrentPage(targetPage);
