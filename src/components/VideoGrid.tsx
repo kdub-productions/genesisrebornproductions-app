@@ -12,6 +12,22 @@ interface Video {
   videoId?: string | null;
 }
 
+// Simple HTML entity decoder
+function decodeHtmlEntities(text: string) {
+  const map: { [key: string]: string } = {
+    '&amp;': '&',
+    '<': '<',
+    '>': '>',
+    '"': '"',
+    '&#39;': "'",
+    '&#x27;': "'",
+    '&#x2F;': '/',
+    '&#x60;': '`',
+    '&#x3D;': '=',
+  };
+  return text.replace(/&[a-zA-Z0-9#]+;/g, (m) => map[m] || m);
+}
+
 interface VideoGridProps {
   setLoading: (loading: boolean) => void;
 }
@@ -51,7 +67,8 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
         const fetchedVideos = (data.items || []).map((item: any) => {
           const vid = item.videoId || null;
           const rawTitle = item.title || '';
-          const title = String(rawTitle).replace(/<[^>]+>/g, '').trim() || 'Untitled video';
+          let title = String(rawTitle).replace(/<[^>]+>/g, '').trim() || 'Untitled video';
+          title = decodeHtmlEntities(title);
           // Prefer provided thumbnail, otherwise fall back to YouTube default thumbnail when we have a video id
           const thumb = item.thumbnail || (vid ? `https://i.ytimg.com/vi/${vid}/hqdefault.jpg` : null);
           return {

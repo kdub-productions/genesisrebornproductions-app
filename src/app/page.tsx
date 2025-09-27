@@ -35,7 +35,7 @@ export default function Home() {
           <Footer />
         </div>
         <Suspense fallback={null}>
-          {EnvDebug ? <EnvDebug /> : null}
+          {process.env.NODE_ENV === 'development' && <EnvDebug />}
           <AdsLoader />
         </Suspense>
       </div>

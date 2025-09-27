@@ -13,7 +13,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ items: [], nextPageToken: '', prevPageToken: '', message: 'Missing server-side YouTube credentials' }, { status: 200 });
   }
 
-  const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&maxResults=${encodeURIComponent(maxResults)}&pageToken=${encodeURIComponent(pageToken)}&order=${encodeURIComponent(order)}`;
+  const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&eventType=completed&maxResults=${encodeURIComponent(maxResults)}&pageToken=${encodeURIComponent(pageToken)}&order=${encodeURIComponent(order)}`;
 
   try {
     const resp = await fetch(apiUrl);
