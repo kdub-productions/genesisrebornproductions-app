@@ -4,6 +4,9 @@ import Navbar from "@/components/navbar";
 const VideoGrid = lazy(() => import("@/components/VideoGrid"));
 import Footer from "@/components/footer";
 import Loading from "@/components/loading";
+// client-only debug and ads loader
+const EnvDebug = process.env.NODE_ENV === 'development' ? lazy(() => import('@/components/envDebug')) : null;
+const AdsLoader = lazy(() => import('@/components/AdsLoader'));
 
 export default function Home() {
   const [loading, setLoading] = useState(true);
@@ -31,6 +34,10 @@ export default function Home() {
         <div className='site-footer'>
           <Footer />
         </div>
+        <Suspense fallback={null}>
+          {EnvDebug ? <EnvDebug /> : null}
+          <AdsLoader />
+        </Suspense>
       </div>
     </>
   );
