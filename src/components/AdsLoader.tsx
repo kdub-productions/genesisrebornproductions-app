@@ -42,6 +42,15 @@ export default function AdsLoader() {
 
   useEffect(() => {
     if (consent) {
+      // Only inject AdSense script if there is an ad slot present in the DOM to avoid 'no_div' errors
+      const wrapper = document.getElementById('ads-root') || document.body;
+      const hasSlot = !!document.querySelector('ins.adsbygoogle');
+      if (!hasSlot) {
+        // No ad slot on the page; don't inject AdSense script. This avoids the "no_div" errors and reduces tracking-prevention noise.
+        console.info('AdsLoader: no ins.adsbygoogle slot found; skipping ad script injection.');
+        return;
+      }
+
       // Inject AdSense script only (avoid AMP auto-ads which can cause attestation/no_div errors and tracking-prevention noise)
       injectScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4585137285765836', { crossOrigin: 'anonymous' });
     }

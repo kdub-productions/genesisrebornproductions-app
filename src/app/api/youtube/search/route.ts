@@ -20,6 +20,31 @@ export async function GET(req: Request) {
     const data = await resp.json();
 
     if (!resp.ok) {
+      console.error('YouTube Data API error', { status: resp.status, body: data });
+      // If quota or other error, attempt to fall back to the public RSS feed for the channel
+      try {
+        const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channelId)}`;
+        const rssResp = await fetch(rssUrl);
+        if (rssResp.ok) {
+          const rssText = await rssResp.text();
+          // Simple XML parsing (no external deps): extract <entry> blocks and then extract yt:videoId, title and media:thumbnail url
+          const entryMatches = rssText.match(/<entry[\s\S]*?<\/entry>/g) || [];
+          const items = entryMatches.slice(0, Number(maxResults)).map((entryXml: string) => {
+            const idMatch = entryXml.match(/<yt:videoId>(.*?)<\/yt:videoId>/);
+            const titleMatch = entryXml.match(/<title>([\s\S]*?)<\/title>/);
+            const thumbMatch = entryXml.match(/<media:thumbnail[^>]*url="([^"]+)"/);
+            const vid = idMatch ? idMatch[1] : null;
+            const title = titleMatch ? titleMatch[1] : null;
+            const thumb = thumbMatch ? thumbMatch[1] : null;
+            return { videoId: vid, title, thumbnail: thumb };
+          });
+          return NextResponse.json({ items, nextPageToken: '', prevPageToken: '' });
+        }
+      } catch (rssErr) {
+        // ignore rss fallback errors and fall through to returning the original API error
+        console.error('RSS fallback failed', rssErr);
+      }
+
       // Propagate status and message to client with helpful hint
       return NextResponse.json({ error: data, message: data?.error?.message || 'YouTube API error' }, { status: resp.status });
     }
