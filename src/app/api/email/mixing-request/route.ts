@@ -27,6 +27,11 @@ const createTransporter = () => nodemailer.createTransport({
 
 export async function POST(request: NextRequest) {
   try {
+    // Ensure SMTP credentials are configured before attempting to process files/send mail
+    if (!process.env.EMAIL_APP_PASSWORD || !process.env.EMAIL_USER) {
+      console.error('SMTP credentials are not configured. EMAIL_USER or EMAIL_APP_PASSWORD is missing.');
+      return NextResponse.json({ error: 'SMTP credentials not configured on server' }, { status: 500 });
+    }
     const formData = await request.formData();
     const name = formData.get('name') as string;
     const email = formData.get('email') as string;
@@ -71,13 +76,15 @@ export async function POST(request: NextRequest) {
     };
 
   const transporter = createTransporter();
-  await transporter.sendMail(mailOptions);
+    await transporter.sendMail(mailOptions);
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('Error sending email:', error);
+    const message = error instanceof Error ? error.message : String(error);
+    console.error('Error sending email (mixing-request):', message, error);
+    // Return the error message to aid debugging (consider removing details in production)
     return NextResponse.json(
-      { error: 'Failed to send email' },
+      { error: `Failed to send email: ${message}` },
       { status: 500 }
     );
   }
