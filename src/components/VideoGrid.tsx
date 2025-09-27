@@ -33,6 +33,14 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
       : Math.max(1, currentPage - 1);
 
     try {
+      if (!apiKey || !channelId) {
+        console.warn('YouTube API key or Channel ID is missing. Skipping fetch.');
+        setVideos([]);
+        setNextPageToken('');
+        setPrevPageToken('');
+        setLoading(false);
+        return;
+      }
       const url = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&maxResults=${videosPerPage}&pageToken=${pageToken}&order=date`;
       const response = await fetch(url);
       

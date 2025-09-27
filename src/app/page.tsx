@@ -9,8 +9,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // initial loading is true; VideoGrid will call setLoading(false) when ready
     console.log("Initial loading state:", loading);
-    return () => setLoading(true);
   }, []);
 
   return (
