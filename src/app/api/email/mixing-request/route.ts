@@ -1,36 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import nodemailer from 'nodemailer';
-
-// Remove the deprecated config export
-// export const config = {
-//   api: {
-//     bodyParser: false,
-//   },
-// };
+import { Resend } from 'resend';
 
 // Add proper export for Next.js App Router
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
-const createTransporter = () => nodemailer.createTransport({
-  service: 'gmail',
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_USER || 'genesisrebornproductions@gmail.com',
-    pass: process.env.EMAIL_APP_PASSWORD
-  },
-  debug: true,
-  tls: { rejectUnauthorized: false }
-});
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
-    // Ensure SMTP credentials are configured before attempting to process files/send mail
-    if (!process.env.EMAIL_APP_PASSWORD || !process.env.EMAIL_USER) {
-      console.error('SMTP credentials are not configured. EMAIL_USER or EMAIL_APP_PASSWORD is missing.');
-      return NextResponse.json({ error: 'SMTP credentials not configured on server' }, { status: 500 });
+    // Ensure Resend API key is configured
+    if (!process.env.RESEND_API_KEY) {
+      console.error('Resend API key is not configured. RESEND_API_KEY is missing.');
+      return NextResponse.json({ error: 'Resend API key not configured on server' }, { status: 500 });
     }
     const formData = await request.formData();
     const name = formData.get('name') as string;
@@ -46,20 +28,21 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Convert Files to Buffers
+    // Convert Files to base64 for Resend attachments
     const attachments = await Promise.all(files.map(async (file) => {
       const arrayBuffer = await file.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
-      
+      const base64 = buffer.toString('base64');
+
       return {
         filename: file.name,
-        content: buffer,
-        contentType: file.type,
+        content: base64,
+        type: file.type,
       };
     }));
 
-    const mailOptions = {
-      from: process.env.EMAIL_USER || 'genesisrebornproductions@gmail.com',
+    const emailData = {
+      from: 'Mixing Request <onboarding@resend.dev>', // Replace with your verified domain/email in Resend
       to: 'genesisrebornproductions@gmail.com',
       subject: `Mixing & Mastering Request: ${selectedTier}`,
       html: `
@@ -72,13 +55,12 @@ export async function POST(request: NextRequest) {
         <p><strong>Reply-To:</strong> ${email}</p>
       `,
       attachments,
-      replyTo: email
+      reply_to: email
     };
 
-  const transporter = createTransporter();
-    await transporter.sendMail(mailOptions);
+    const result = await resend.emails.send(emailData);
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, id: result.data?.id });
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     console.error('Error sending email (mixing-request):', message, error);
