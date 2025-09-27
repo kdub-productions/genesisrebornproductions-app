@@ -208,8 +208,9 @@ export default function BeatsForSale() {
   const [selectedLicense, setSelectedLicense] = useState<License | null>(null);
   const [showPaymentForm, setShowPaymentForm] = useState<boolean>(false);
   const [showThankYouPopup, setShowThankYouPopup] = useState<boolean>(false);
-  const [saleActive] = useState<boolean>(false);
-  const [salePercentage] = useState<number>(50); 
+  // Sale controlled by code defaults below. Edit these values to change site behavior.
+  const [saleActive, setSaleActive] = useState<boolean>(true); // true = sale active
+  const [salePercentage, setSalePercentage] = useState<number>(30); // change to desired percent
 
   useEffect(() => {
     const fetchBeats = async () => {
@@ -252,7 +253,7 @@ export default function BeatsForSale() {
             <section className="beats-store-container">
               {saleActive && (
                 <div className="store-wide-sale-banner">
-                  <h2>50% OFF ALL BEATS!</h2>
+                  <h2>{salePercentage}% OFF ALL BEATS!</h2>
                 </div>
               )}
               <h1 className="section-heading">Beats For Sale</h1>

@@ -5,18 +5,21 @@ import '../../styles/site-wide-styles/sale-component.css';
 interface MixingMasteringSaleProps {
   originalPrice: number;
   serviceName: string;
+  discountPercentage?: number;
 }
 
 const MixingMasteringSale: React.FC<MixingMasteringSaleProps> = ({
   originalPrice,
   serviceName
+  ,discountPercentage = 30
 }) => {
-  const discountedPrice = originalPrice * 0.5;
+  const multiplier = (100 - discountPercentage) / 100;
+  const discountedPrice = originalPrice * multiplier;
 
   return (
     <div className="beat-sale-container">
       <div className="sale-badge">
-        50% OFF
+        {discountPercentage}% OFF
       </div>
       <div className="beat-price-container">
         <span className="original-price">${originalPrice.toFixed(2)}</span>

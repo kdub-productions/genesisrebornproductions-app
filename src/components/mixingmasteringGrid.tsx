@@ -16,7 +16,8 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
-  const [saleActive,] = useState(false);
+  const [saleActive, setSaleActive] = useState(false); 
+  const [salePercentage, setSalePercentage] = useState<number>(30); // change this number to set percent (e.g. 30)
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -28,6 +29,9 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       clearTimeout(timer);
     };
   }, [setLoading]);
+
+  // Sale is controlled by the `saleActive` and `salePercentage` defaults above.
+  // To change sale behavior, edit the values above in this file.
 
   const serviceTiers = [
     {
@@ -199,8 +203,8 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       <section className="services-intro">
         {saleActive && (
           <div className="store-wide-sale-banner">
-            <h2>50% OFF ALL MIXING & MASTERING SERVICES!</h2>
-            <p>(Discount applied automatically at invoice)</p> 
+            <h2>{salePercentage}% OFF ALL MIXING & MASTERING SERVICES!</h2>
+            <p>(Discount applied automatically at invoice)</p>
           </div>
         )}
         <h2>Professional Mixing & Mastering Services</h2>
@@ -250,6 +254,7 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
                   <MixingMasteringSale
                     originalPrice={parseInt(tier.price.replace('$', ''))}
                     serviceName={tier.name}
+                    discountPercentage={salePercentage}
                   />
                 ) : (
                   <span className="regular-price">{tier.price}</span>
