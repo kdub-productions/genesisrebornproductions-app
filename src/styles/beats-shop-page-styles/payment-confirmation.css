@@ -1,0 +1,94 @@
+.payment-confirmation-popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 400px;
+    padding: 25px;
+    border-radius: 8px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    text-align: center;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .payment-success-popup {
+    background-color: #1a1a1a;
+    border: 2px solid #33cc33;
+  }
+  
+  .payment-decline-popup {
+    background-color: #1a1a1a;
+    border: 2px solid #ff3333;
+  }
+  
+  .popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  .popup-title {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+  
+  .popup-success .popup-title {
+    color: #66ff66;
+  }
+  
+  .popup-decline .popup-title {
+    color: #ff6666;
+  }
+  
+  .popup-message {
+    margin-bottom: 20px;
+    color: #f8f8f8;
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .popup-button {
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+    font-size: 1rem;
+  }
+  
+  .popup-success-button {
+    background-color: #33cc33;
+    color: white;
+  }
+  
+  .popup-success-button:hover {
+    background-color: #29a329;
+  }
+  
+  .popup-decline-button {
+    background-color: #ff3333;
+    color: white;
+  }
+  
+  .popup-decline-button:hover {
+    background-color: #e60000;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: translate(-50%, -60%); opacity: 0; }
+    to { transform: translate(-50%, -50%); opacity: 1; }
+  }

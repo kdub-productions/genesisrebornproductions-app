@@ -1,0 +1,29 @@
+.privacyPolicyTitle {
+    font-size: 2em;
+    font-weight: bold;
+    margin-bottom: 1em;
+}
+
+.privacyPolicySection {
+    margin-bottom: 2em;
+}
+
+.privacyPolicySectionTitle {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 0.5em;
+}
+
+.privacyPolicyList {
+    list-style-type: disc;
+    margin-left: 20px;
+}
+
+a {
+    color: #6B46C1; /* Link color, matching your notFound.css */
+    text-decoration: underline;
+}
+
+a:hover {
+    text-decoration: none;
+}

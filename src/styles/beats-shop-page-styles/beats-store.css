@@ -1,0 +1,94 @@
+.beats-store-container {
+    padding: 20px;
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+  }
+  
+  .beats-store-title {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .beats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  
+  .beat-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+  }
+  
+  .beat-card:hover {
+    transform: translateY(-5px);
+  }
+  
+  .beat-artwork-container {
+    width: 100%;
+    height: auto;
+  }
+  
+  .beat-artwork {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .beat-details {
+    padding: 15px;
+  }
+  
+  .beat-title {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  .beat-genre {
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  .beat-price {
+    font-weight: bold;
+    color: #0070f3; /* Example: Blue */
+    margin-bottom: 10px;
+  }
+  
+  .beat-audio-player {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .buy-beat-button {
+    background-color: #0070f3; /* Example: Blue */
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .buy-beat-button:hover {
+    background-color: #0050b3; /* Darker blue on hover */
+  }
+  
+  .download-beat-button {
+    background-color: #0070f3; /* Example: Blue */
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+  }
+  
+  .download-beat-button:hover {
+    background-color: #0050b3; /* Darker blue on hover */
+  }
+  
