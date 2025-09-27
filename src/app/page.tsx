@@ -1,12 +1,12 @@
 "use client";
-import { useState, useEffect, Suspense, lazy } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Navbar from "@/components/navbar";
-const VideoGrid = lazy(() => import("@/components/VideoGrid"));
+import VideoGrid from '@/components/VideoGrid';
 import Footer from "@/components/footer";
 import Loading from "@/components/loading";
-// client-only debug and ads loader
-const EnvDebug = process.env.NODE_ENV === 'development' ? lazy(() => import('@/components/envDebug')) : null;
-const AdsLoader = lazy(() => import('@/components/AdsLoader'));
+// client-only debug and ads loader (direct imports to avoid lazy null/hydration mismatches)
+import EnvDebug from '@/components/envDebug';
+import AdsLoader from '@/components/AdsLoader';
 
 export default function Home() {
   const [loading, setLoading] = useState(true);

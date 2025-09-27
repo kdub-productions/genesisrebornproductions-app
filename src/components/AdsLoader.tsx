@@ -42,21 +42,8 @@ export default function AdsLoader() {
 
   useEffect(() => {
     if (consent) {
-      // Inject AdSense script
+      // Inject AdSense script only (avoid AMP auto-ads which can cause attestation/no_div errors and tracking-prevention noise)
       injectScript('https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4585137285765836', { crossOrigin: 'anonymous' });
-      // Inject AMP auto ads script if not present (some pages rely on it)
-      injectScript('https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js', { 'custom-element': 'amp-auto-ads' });
-      // add amp-auto-ads tag into ads-root for AMP auto-ads behavior
-      const wrapper = document.getElementById('ads-root');
-      if (wrapper) {
-        const existing = wrapper.querySelector('amp-auto-ads');
-        if (!existing) {
-          const amp = document.createElement('amp-auto-ads');
-          amp.setAttribute('type', 'adsense');
-          amp.setAttribute('data-ad-client', 'ca-pub-4585137285765836');
-          wrapper.appendChild(amp);
-        }
-      }
     }
   }, [consent]);
 
