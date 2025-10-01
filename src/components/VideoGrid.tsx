@@ -67,8 +67,7 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
         const fetchedVideos = (data.items || []).map((item: any) => {
           const vid = item.videoId || null;
           const rawTitle = item.title || '';
-          let title = String(rawTitle).replace(/<[^>]+>/g, '').trim() || 'Untitled video';
-          title = decodeHtmlEntities(title);
+          let title = String(rawTitle).replace(/"/g, '"').replace(/&amp;/g, '&').replace(/</g, '<').replace(/>/g, '>').replace(/&#39;/g, "'").replace(/&#x27;/g, "'").trim() || 'Untitled video';
           // Prefer provided thumbnail, otherwise fall back to YouTube default thumbnail when we have a video id
           const thumb = item.thumbnail || (vid ? `https://i.ytimg.com/vi/${vid}/hqdefault.jpg` : null);
           return {
@@ -155,7 +154,7 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
                 width="480"
                 height="360"
                 className={`thumbnail-image ${activeVideo === index ? 'hidden' : ''}`}
-                style={{backgroundColor: '#000', objectFit: 'cover'}}
+                style={{backgroundColor: '#000', objectFit: 'cover', display: activeVideo === index ? 'none' : 'block'}}
                 onError={(e) => {
                   const t = e.currentTarget as HTMLImageElement;
                   if (video.videoId) {
@@ -163,6 +162,14 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
                     if (t.src !== fallback) t.src = fallback;
                   } else {
                     t.style.backgroundColor = '#222';
+                  }
+                }}
+                onLoad={(e) => {
+                  const t = e.currentTarget as HTMLImageElement;
+                  if (t.naturalWidth === 1 && t.naturalHeight === 1) {
+                    // This is a 1x1 pixel transparent image, likely a placeholder or error
+                    t.style.backgroundColor = '#222';
+                    t.src = `https://i.ytimg.com/vi/${video.videoId}/hqdefault.jpg`;
                   }
                 }}
               />
@@ -177,16 +184,18 @@ const VideoGrid = ({ setLoading }: VideoGridProps) => {
                   />
                 )}
               </div>
-              <button 
-                className="play-button"
-                aria-label={`Play ${video.title}`}
-                onClick={(e) => { e.stopPropagation(); handleVideoClick(index); }}
-                tabIndex={-1}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M8 5v14l11-7z"/>
-                </svg>
-              </button>
+              {!activeVideo && (
+                <button 
+                  className="play-button"
+                  aria-label={`Play ${video.title}`}
+                  onClick={(e) => { e.stopPropagation(); handleVideoClick(index); }}
+                  tabIndex={-1}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M8 5v14l11-7z"/>
+                  </svg>
+                </button>
+              )}
             </div>
             <div className="video-details">
               <h3 className="video-title">{video.title}</h3>

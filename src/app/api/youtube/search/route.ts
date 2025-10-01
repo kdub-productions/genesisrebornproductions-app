@@ -13,18 +13,23 @@ export async function GET(req: Request) {
     return NextResponse.json({ items: [], nextPageToken: '', prevPageToken: '', message: 'Missing server-side YouTube credentials' }, { status: 200 });
   }
 
-  const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&eventType=completed&maxResults=${encodeURIComponent(maxResults)}&pageToken=${encodeURIComponent(pageToken)}&order=${encodeURIComponent(order)}`;
+  const apiUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&channelId=${channelId}&part=snippet&type=video&maxResults=${encodeURIComponent(maxResults)}&pageToken=${encodeURIComponent(pageToken)}&order=${encodeURIComponent(order)}`;
 
   try {
+    console.log('Fetching YouTube API URL:', apiUrl);
     const resp = await fetch(apiUrl);
+    console.log('YouTube API response status:', resp.status);
     const data = await resp.json();
+    console.log('YouTube API response data:', data);
 
     if (!resp.ok) {
       console.error('YouTube Data API error', { status: resp.status, body: data });
       // If quota or other error, attempt to fall back to the public RSS feed for the channel
       try {
         const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channelId)}`;
+        console.log('Fetching RSS feed URL:', rssUrl);
         const rssResp = await fetch(rssUrl);
+        console.log('RSS feed response status:', rssResp.status);
         if (rssResp.ok) {
           const rssText = await rssResp.text();
           // Simple XML parsing (no external deps): extract <entry> blocks and then extract yt:videoId, title and media:thumbnail url
@@ -58,6 +63,7 @@ export async function GET(req: Request) {
 
     return NextResponse.json({ items, nextPageToken: data.nextPageToken || '', prevPageToken: data.prevPageToken || '' });
   } catch (err) {
+    console.error('Failed to fetch YouTube data:', err);
     return NextResponse.json({ error: String(err), message: 'Failed to fetch YouTube data' }, { status: 500 });
   }
 }
