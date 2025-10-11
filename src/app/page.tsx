@@ -19,7 +19,6 @@ export default function Home() {
   return (
     <>
       <div className="page-container">
-        {loading && <Loading />}
         <Navbar />
         <div className='main-content'>
           <main>

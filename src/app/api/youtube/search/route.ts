@@ -41,7 +41,7 @@ export async function GET(req: Request) {
             const vid = idMatch ? idMatch[1] : null;
             const title = titleMatch ? titleMatch[1] : null;
             const thumb = thumbMatch ? thumbMatch[1] : null;
-            return { videoId: vid, title, thumbnail: thumb };
+            return { videoId: vid, title, thumbnail: `https://i.ytimg.com/vi/${vid}/mqdefault.jpg` };
           });
           return NextResponse.json({ items, nextPageToken: '', prevPageToken: '' });
         }
@@ -58,7 +58,9 @@ export async function GET(req: Request) {
     const items = (data.items || []).map((item: any) => ({
       videoId: item.id?.videoId,
       title: item.snippet?.title,
-      thumbnail: item.snippet?.thumbnails?.medium?.url || item.snippet?.thumbnails?.default?.url || null,
+      thumbnail: `https://i.ytimg.com/vi/${item.id?.videoId}/mqdefault.jpg`,
+      channelTitle: item.snippet?.channelTitle,
+      publishedAt: item.snippet?.publishedAt,
     }));
 
     return NextResponse.json({ items, nextPageToken: data.nextPageToken || '', prevPageToken: data.prevPageToken || '' });

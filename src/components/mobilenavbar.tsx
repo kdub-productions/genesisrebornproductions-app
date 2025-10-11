@@ -18,26 +18,30 @@ export default function MobileNavbar() {
           {menuOpen ? "✕" : "☰"}
         </button>
         <div className="mobile-logo2">
-          <Image
-            src="/images/Genisis Reborn _real_logo_3.png?v=2"
-            alt="Genesis Reborn Productions Logo"
-            width={300}
-            height={90}
-            priority
-          />
+          <div style={{ position: 'relative', width: '300px', height: '90px', maxWidth: '100%' }}>
+            <Image
+              src="/images/Genisis Reborn _real_logo_3.png?v=2"
+              alt="Genesis Reborn Productions Logo"
+              fill
+              style={{objectFit: 'contain'}}
+              priority
+            />
+          </div>
         </div>
       </div>
       {menuOpen && (
         <div className="mobile-navbar-content">
           <div className="mobile-logo">
           <Link href='/'>
-            <Image
-              src="/images/Genisis Reborn _real_logo SNAKE AND APPLE.png"
-              alt="Genesis Reborn Productions Logo"
-              width={300}
-              height={120}
-              priority
-            />
+            <div style={{ position: 'relative', width: '300px', height: '120px', maxWidth: '100%' }}>
+              <Image
+                src="/images/Genisis Reborn _real_logo SNAKE AND APPLE.png"
+                alt="Genesis Reborn Productions Logo"
+                fill
+                style={{objectFit: 'contain'}}
+                priority
+              />
+            </div>
             </Link>
           </div>
           <ul className="mobile-nav-links">

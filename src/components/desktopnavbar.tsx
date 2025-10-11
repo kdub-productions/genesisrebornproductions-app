@@ -1,27 +1,43 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import "@/styles/site-wide-styles/styles.css";
 
 export default function DesktopNavbar() {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   const toggleDropdown = (menu: string) => {
     setActiveDropdown(activeDropdown === menu ? null : menu);
   };
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setActiveDropdown(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
-    <nav className="navbar">
+    <nav className="navbar" ref={dropdownRef}>
       <div className="companyname">
       <Link href='/'>
-        <Image
-          src="/images/Genisis Reborn _real_logo2.png"
-          alt="Genesis Reborn Productions Logo"
-          width={350}
-          height={200}
-          priority
-        />
+        <div style={{ position: 'relative', width: '350px', height: '200px', maxWidth: '100%', maxHeight: '100%' }}>
+          <Image
+            src="/images/Genisis Reborn _real_logo2.png"
+            alt="Genesis Reborn Productions Logo"
+            fill
+            style={{objectFit: 'contain'}}
+            priority
+          />
+        </div>
         </Link>
       </div>
       <ul className="nav-links">
