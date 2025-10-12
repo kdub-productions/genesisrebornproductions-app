@@ -3,10 +3,14 @@ import nodemailer from 'nodemailer';
 
 const createTransporter = () => nodemailer.createTransport({
   service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_APP_PASSWORD,
+    user: process.env.EMAIL_USER || 'genesisrebornproductions@gmail.com',
+    pass: process.env.EMAIL_APP_PASSWORD
   },
+  tls: { rejectUnauthorized: false }
 });
 
 export async function POST(request: NextRequest) {
@@ -27,29 +31,60 @@ const name = firstName && lastName ? `${firstName} ${lastName}` : email;
       return NextResponse.json({ error: 'Invalid email address format.' }, { status: 400 });
     }
 
-    // Create email options (customer and admin -  you might want to separate these into functions)
-    const customerMailOptions = {
-      from: process.env.EMAIL_USER,
-      to: email,
-      subject: 'Thank You for Your Purchase!', // More appropriate subject line
+    // Parse the message to extract beat details
+    // Message format: "Beat Purchase Confirmation: Beat Title: {title}, License Type: {license}, Price: ${price}, Payment ID: {id}"
+    const beatTitleMatch = message.match(/Beat Title:\s*([^,]+)/);
+    const licenseMatch = message.match(/License Type:\s*([^,]+)/);
+    const priceMatch = message.match(/Price:\s*\$([0-9.]+)/);
+    const paymentIdMatch = message.match(/Payment ID:\s*([^\s]+)/);
+
+    const beatTitle = beatTitleMatch ? beatTitleMatch[1].trim() : 'N/A';
+    const licenseType = licenseMatch ? licenseMatch[1].trim() : 'N/A';
+    const price = priceMatch ? parseFloat(priceMatch[1]) : 0;
+    const paymentId = paymentIdMatch ? paymentIdMatch[1].trim() : 'N/A';
+
+    const timestamp = new Date().toISOString();
+
+    // Detailed admin email
+    const adminMailOptions = {
+      from: process.env.EMAIL_USER || 'genesisrebornproductions@gmail.com',
+      to: 'genesisrebornproductions@gmail.com',
+      subject: `Beat Purchase: ${beatTitle} - ${name}`,
       html: `
-        <p>Dear ${name},</p>
-        <p>Thank you for your purchase! Your order confirmation is below:</p>
-        <p>Message: ${message}</p> <p>Best regards,</p>
-        <p>Your Company Name</p>
+        <h2>New Beat Purchase</h2>
+        <p><strong>Submission Timestamp:</strong> ${timestamp}</p>
+        <p><strong>Customer Name:</strong> ${name}</p>
+        <p><strong>Customer Email:</strong> ${email}</p>
+        <p><strong>Beat Title:</strong> ${beatTitle}</p>
+        <p><strong>License Type:</strong> ${licenseType}</p>
+        <p><strong>Price:</strong> $${price.toFixed(2)}</p>
+        <p><strong>Payment ID:</strong> ${paymentId}</p>
+        <p><strong>Reply-To:</strong> ${email}</p>
+        <p><em>Next Steps: Send the beat file to the customer via email or file sharing service.</em></p>
       `,
+      replyTo: email
     };
 
-    const adminMailOptions = {
-      from: process.env.EMAIL_USER,
-      to: process.env.EMAIL_USER,
-      subject: 'New Beat Purchase',
+    // Customer confirmation email (optional, as Stripe handles payment confirmation)
+    const customerMailOptions = {
+      from: process.env.EMAIL_USER || 'genesisrebornproductions@gmail.com',
+      to: email,
+      subject: `Purchase Confirmation: ${beatTitle}`,
       html: `
-        <p>A new beat has been purchased:</p>
-        <p>Customer Name: ${name}</p>
-        <p>Customer Email: ${email}</p> 
-        <p>Message: ${message}</p>
+        <h2>Thank You for Your Beat Purchase!</h2>
+        <p>Dear ${name},</p>
+        <p>We've received your payment for <strong>${beatTitle}</strong> with <strong>${licenseType}</strong> license.</p>
+        <p><strong>Purchase Details:</strong></p>
+        <ul>
+          <li><strong>Beat Title:</strong> ${beatTitle}</li>
+          <li><strong>License:</strong> ${licenseType}</li>
+          <li><strong>Price:</strong> $${price.toFixed(2)}</li>
+          <li><strong>Payment ID:</strong> ${paymentId}</li>
+        </ul>
+        <p>You will receive your beat file in an email within 1-3 business days. If you have any questions, reply to this email.</p>
+        <p>Best regards,<br>Genesis Reborn Productions</p>
       `,
+      replyTo: process.env.EMAIL_USER || 'genesisrebornproductions@gmail.com'
     };
 
     // Send both emails concurrently using a runtime-created transporter

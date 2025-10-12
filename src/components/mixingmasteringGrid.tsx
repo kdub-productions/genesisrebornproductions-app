@@ -151,7 +151,14 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
     }
 
     if (files.length === 0) {
-      setSubmitMessage('Please upload at least one file');
+      setSubmitMessage('Please upload at least one file or provide a link in the message');
+      return;
+    }
+
+    // Client-side size check
+    const totalSize = files.reduce((sum, file) => sum + file.size, 0);
+    if (totalSize > 20 * 1024 * 1024) { // 20MB
+      setSubmitMessage('Total file size exceeds 20MB. Please use file links (WeTransfer, Dropbox) instead.');
       return;
     }
 
@@ -162,8 +169,7 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       const formData = new FormData();
       formData.append('name', name);
       formData.append('email', email);
-      const selectedTierName = serviceTiers.find(tier => tier.id === selectedTier)?.name || 'Unknown Tier';
-      formData.append('selectedTier', selectedTierName);
+      formData.append('selectedTierId', selectedTier);
       formData.append('message', message);
 
       files.forEach(file => {
@@ -178,7 +184,7 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
       const result = await response.json();
 
       if (response.ok && result.success) {
-        setSubmitMessage('Your request has been submitted successfully! We will contact you shortly.');
+        setSubmitMessage('Your request has been submitted successfully! Check your email for confirmation. We will send an invoice shortly.');
         setFiles([]);
         setName('');
         setEmail('');

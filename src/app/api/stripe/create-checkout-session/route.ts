@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: 'payment',
-      success_url: `${request.headers.get('origin')}/thank-you`,
+      success_url: `${request.headers.get('origin')}/beatsforsale/success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${request.headers.get('origin')}/beatsforsale`,
       metadata: {
         beatId: beat.id,
