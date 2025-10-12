@@ -38,6 +38,10 @@ const nextConfig = {
         },
       ];
     },
+    // Enable AMP
+    amp: {
+      canonicalBase: '/',
+    },
   };
 
   module.exports = nextConfig;

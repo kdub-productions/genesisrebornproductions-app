@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, Suspense } from 'react';
+import Head from 'next/head';
 import Navbar from "@/components/navbar";
 import VideoGrid from '@/components/VideoGrid';
 import Footer from "@/components/footer";
