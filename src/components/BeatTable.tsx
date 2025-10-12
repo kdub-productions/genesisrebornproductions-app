@@ -88,8 +88,26 @@ const BeatTable: React.FC = () => {
     });
   };
 
-  const handleRemoveBeat = (id: number) => {
-    setBeats(beats.filter(beat => beat.id !== id));
+  const handleRemoveBeat = async (id: number) => {
+    const updatedBeats = beats.filter(beat => beat.id !== id);
+    setBeats(updatedBeats);
+    try {
+      const response = await fetch('/api/beats', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedBeats),
+      });
+      if (!response.ok) {
+        throw new Error('Failed to save beats');
+      }
+      alert('Beat removed successfully');
+      // Trigger a refresh of the beats data to ensure consistency
+      fetchBeats();
+    } catch (error: any) {
+      alert('Error removing beat: ' + error.message);
+      // Revert the local state if save failed
+      setBeats(beats);
+    }
   };
 
   const handleToggleSold = (id: number) => {

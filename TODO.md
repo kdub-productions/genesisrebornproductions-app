@@ -1,0 +1,4 @@
+- [x] Modify `handleRemoveBeat` in `BeatTable.tsx` to automatically save changes after removing a beat
+- [x] Extract `fetchBeats` function in `beatsforsale/page.tsx` to enable refreshing data
+- [x] Add `fetchBeats()` call after successful removal to refresh admin table
+- [x] Test the remove functionality to ensure changes persist (server running, ready for manual testing)

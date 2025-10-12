@@ -202,17 +202,17 @@ export default function BeatsForSale() {
   const [saleActive, setSaleActive] = useState<boolean>(false); // true = sale active
   const [salePercentage, setSalePercentage] = useState<number>(50); // change to desired percent
 
-  useEffect(() => {
-    const fetchBeats = async () => {
-      const response = await fetch('/api/beats');
-      const data = await response.json();
-      setBeatData(data);
-      setLoading(false);
-      if (data.length === 0) {
-        setShowEmptyPopup(true);
-      }
-    };
+  const fetchBeats = async () => {
+    const response = await fetch('/api/beats');
+    const data = await response.json();
+    setBeatData(data);
+    setLoading(false);
+    if (data.length === 0) {
+      setShowEmptyPopup(true);
+    }
+  };
 
+  useEffect(() => {
     fetchBeats();
   }, []);
 
