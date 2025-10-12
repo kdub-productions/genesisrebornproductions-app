@@ -1,0 +1,36 @@
+[
+  {
+    "id": 1,
+    "title": "testing the web",
+    "genre": "hiphoop",
+    "artwork": "/images/BeatCoverArt/testing_the_web_cover.png",
+    "audioPreview": "/audio/previews/testing_the_web_preview.mp3",
+    "fullAudioId": 1,
+    "price": 500,
+    "license": {
+      "id": 1,
+      "name": "Standatrd",
+      "price": 500,
+      "description": "full beat 4 u ",
+      "paymentLink": "https://buy.stripe.com/00g8A3f7e8KT0BqeUU"
+    },
+    "isSold": false
+  },
+  {
+    "id": 2,
+    "title": "dsfdsf",
+    "genre": "fdfasfdds",
+    "artwork": "/images/BeatCoverArt/dsfdsf_cover.png",
+    "audioPreview": "/audio/previews/dsfdsf_preview.mp3",
+    "fullAudioId": 2,
+    "price": 43343,
+    "license": {
+      "id": 2,
+      "name": "Standatrd",
+      "price": 43343,
+      "description": "full beat",
+      "paymentLink": "https://buy.stripe.com/00g8A3f7e8KT0BqeUU"
+    },
+    "isSold": false
+  }
+]

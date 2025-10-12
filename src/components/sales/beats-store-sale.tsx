@@ -15,7 +15,7 @@ const BeatStoreSale: React.FC<BeatStoreSaleProps> = ({
   originalPrice,
   license,
   discountPercentage = 50,
-  showBadge = false,
+  showBadge = true,
 }) => {
   const discountMultiplier = (100 - discountPercentage) / 100;
   const discountedPrice = originalPrice * discountMultiplier;

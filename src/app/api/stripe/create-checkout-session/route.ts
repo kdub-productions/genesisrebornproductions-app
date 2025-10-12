@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { beatsData, Beat, License } from '@/types/beats'; // Import beatsData and types
+import { Beat, License } from '@/types/beats';
+import fs from 'fs';
+import path from 'path';
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,8 +17,13 @@ export async function POST(request: NextRequest) {
 
     const { beatId, licenseId, price, beatTitle } = await request.json();
 
+    // Read beats from JSON file
+    const filePath = path.join(process.cwd(), 'public', 'data', 'beats.json');
+    const fileContents = fs.readFileSync(filePath, 'utf8');
+    const beatsData: Beat[] = JSON.parse(fileContents);
+
     // Find the beat in your data
-    const beat: Beat | undefined = beatsData.find((b) => b.id === beatId);
+    const beat: Beat | undefined = beatsData.find((b: Beat) => b.id === beatId);
     if (!beat) {
       return NextResponse.json({ error: 'Beat not found' }, { status: 404 });
     }

@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect } from 'react';
-import { Beat as ApiBeat } from '@/types/beats';
+import { Beat } from '@/types/beats';
 import { License } from '@/app/api/licenses';
 import Loading from '@/components/loading';
 import { loadStripe } from '@stripe/stripe-js';
@@ -18,22 +18,10 @@ import BeatPurchaseForm from "@/components/BeatPurchaseForm";
 import PaymentConfirmationPopup from "@/components/PaymentConfirmationPopup";
 import BeatStoreSale from '@/components/sales/beats-store-sale'; // Remove this line to disable sale
 
-// Update the Beat interface to match the one in beats.ts
-interface Beat {
-  id: number;
-  title: string;
-  genre: string;
-  artwork: string;
-  audioPreview: string;
-  fullAudioId: number;
-  price: number;
-  license: License; // Single license
-}
-
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || '');
 
 // Component to handle Stripe payment functionality
-const CheckoutForm = ({ beat, license, onPaymentComplete, onCancel }: { beat: ApiBeat, license: License, onPaymentComplete?: () => void, onCancel?: () => void }) => {
+const CheckoutForm = ({ beat, license, price, onPaymentComplete, onCancel }: { beat: Beat, license: License, price: number, onPaymentComplete?: () => void, onCancel?: () => void }) => {
   const stripe = useStripe();
   const elements = useElements();
   const [paymentError, setPaymentError] = useState<string | null>(null);
@@ -65,7 +53,7 @@ const CheckoutForm = ({ beat, license, onPaymentComplete, onCancel }: { beat: Ap
         body: JSON.stringify({
           beatId: beat.id,
           licenseId: license.id,
-          price: license.price,
+          price: price,
           email: email,
           firstName: firstName,
           lastName: lastName,
@@ -110,7 +98,7 @@ const CheckoutForm = ({ beat, license, onPaymentComplete, onCancel }: { beat: Ap
               firstName: firstName,
               lastName: lastName,
               email: email,
-              message: `Beat Purchase Confirmation: Beat Title: ${beat.title}, License Type: ${license.name}, Price: $${license.price.toFixed(2)}, Payment ID: ${paymentIntent.id}`,
+              message: `Beat Purchase Confirmation: Beat Title: ${beat.title}, License Type: ${license.name}, Price: $${price.toFixed(2)}, Payment ID: ${paymentIntent.id}`,
             }),
           });
   
@@ -189,12 +177,12 @@ const CheckoutForm = ({ beat, license, onPaymentComplete, onCancel }: { beat: Ap
         >
           Cancel
         </button>
-        <button 
-          type="submit" 
-          className="buy-beat-button" 
+        <button
+          type="submit"
+          className="buy-beat-button"
           disabled={!stripe || processing}
         >
-          Buy {license.name} License - ${license.price.toFixed(2)}
+          Buy {license.name} License - ${price.toFixed(2)}
         </button>
       </div>
     </form>
@@ -202,15 +190,17 @@ const CheckoutForm = ({ beat, license, onPaymentComplete, onCancel }: { beat: Ap
 };
 
 export default function BeatsForSale() {
-  const [beatData, setBeatData] = useState<ApiBeat[]>([]);
+  const [beatData, setBeatData] = useState<Beat[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedBeat, setSelectedBeat] = useState<ApiBeat | null>(null);
+  const [selectedBeat, setSelectedBeat] = useState<Beat | null>(null);
   const [selectedLicense, setSelectedLicense] = useState<License | null>(null);
+  const [selectedPrice, setSelectedPrice] = useState<number | null>(null);
   const [showPaymentForm, setShowPaymentForm] = useState<boolean>(false);
   const [showThankYouPopup, setShowThankYouPopup] = useState<boolean>(false);
+  const [showEmptyPopup, setShowEmptyPopup] = useState<boolean>(false);
   // Sale controlled by code defaults below. Edit these values to change site behavior.
-  const [saleActive, setSaleActive] = useState<boolean>(true); // true = sale active
-  const [salePercentage, setSalePercentage] = useState<number>(30); // change to desired percent
+  const [saleActive, setSaleActive] = useState<boolean>(false); // true = sale active
+  const [salePercentage, setSalePercentage] = useState<number>(50); // change to desired percent
 
   useEffect(() => {
     const fetchBeats = async () => {
@@ -218,15 +208,41 @@ export default function BeatsForSale() {
       const data = await response.json();
       setBeatData(data);
       setLoading(false);
+      if (data.length === 0) {
+        setShowEmptyPopup(true);
+      }
     };
 
     fetchBeats();
   }, []);
 
-  const handleLicenseSelect = (beat: ApiBeat, license: License) => {
+  useEffect(() => {
+    const handleAudioPlay = (event: Event) => {
+      const audioElements = document.querySelectorAll('audio');
+      audioElements.forEach((audio) => {
+        if (audio !== event.target) {
+          audio.pause();
+        }
+      });
+    };
+
+    const audioElements = document.querySelectorAll('audio');
+    audioElements.forEach((audio) => {
+      audio.addEventListener('play', handleAudioPlay);
+    });
+
+    return () => {
+      audioElements.forEach((audio) => {
+        audio.removeEventListener('play', handleAudioPlay);
+      });
+    };
+  }, [beatData]);
+
+  const handleLicenseSelect = (beat: Beat, license: License) => {
     const finalPrice = saleActive ? license.price * ((100 - salePercentage) / 100) : license.price;
     setSelectedBeat(beat);
     setSelectedLicense(license);
+    setSelectedPrice(finalPrice);
     setShowPaymentForm(true);
   };
 
@@ -269,14 +285,15 @@ export default function BeatsForSale() {
                           height={300}
                           className="beat-artwork"
                         />
+                        {beat.isSold && <span className="sold-badge">SOLD</span>}
                       </div>
                       <div className="beat-details">
                         <h3>{beat.title}</h3>
                         <p>Genre: {beat.genre}</p>
                         <div className="price-section">
                           {saleActive ? (
-                            <BeatStoreSale 
-                              originalPrice={beat.price} 
+                            <BeatStoreSale
+                              originalPrice={beat.price}
                               license={beat.license}
                               discountPercentage={salePercentage}
                               showBadge={true}
@@ -289,32 +306,38 @@ export default function BeatsForSale() {
                           <source src={beat.audioPreview} type="audio/mpeg" />
                           Your browser does not support the audio element.
                         </audio>
-                        
+
                         <div>
-                          {selectedBeat?.id === beat.id && selectedLicense?.id === beat.license.id ? (
-                            showPaymentForm && (
-                              <CheckoutForm 
-                                beat={beat} 
-                                license={beat.license} 
-                                onPaymentComplete={handlePaymentComplete}
-                                onCancel={handlePaymentCancel}
-                              />
-                            )
-                          ) : (
-                            <button
-                              className="buy-beat-button"
-                              onClick={() => handleLicenseSelect(beat, beat.license)}
-                            >
-                              Buy {beat.license.name} ${beat.license.price.toFixed(2)}
-                            </button>
-                          )}
+                          {(() => {
+                            const finalPrice = saleActive ? beat.license.price * ((100 - salePercentage) / 100) : beat.license.price;
+                            return selectedBeat?.id === beat.id && selectedLicense?.id === beat.license.id ? (
+                              showPaymentForm && (
+                                <CheckoutForm
+                                  beat={beat}
+                                  license={beat.license}
+                                  price={selectedPrice!}
+                                  onPaymentComplete={handlePaymentComplete}
+                                  onCancel={handlePaymentCancel}
+                                />
+                              )
+                            ) : beat.isSold ? (
+                              <p className="sold-message">Sold - Listen to sample above</p>
+                            ) : (
+                              <button
+                                className="buy-beat-button"
+                                onClick={() => handleLicenseSelect(beat, beat.license)}
+                              >
+                                Buy {beat.license.name} ${finalPrice.toFixed(2)}
+                              </button>
+                            );
+                          })()}
                         </div>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p>Loading beats...</p>
+                <p>Beats available soon!</p>
               )}
             </section>
           </main>

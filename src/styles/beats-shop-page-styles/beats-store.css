@@ -91,4 +91,46 @@
   .download-beat-button:hover {
     background-color: #0050b3; /* Darker blue on hover */
   }
+
+  /* Dark mode overrides */
+  @media (prefers-color-scheme: dark) {
+    .beats-store-container {
+      background-color: var(--gray-100);
+    }
+
+    .beat-card {
+      background-color: var(--gray-200);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .beat-title {
+      color: var(--gray-800);
+    }
+
+    .beat-genre {
+      color: var(--gray-600);
+    }
+
+    .beat-price {
+      color: var(--primary-light);
+    }
+
+    .buy-beat-button {
+      background-color: var(--primary);
+      color: var(--light);
+    }
+
+    .buy-beat-button:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .download-beat-button {
+      background-color: var(--primary);
+      color: var(--light);
+    }
+
+    .download-beat-button:hover {
+      background-color: var(--primary-dark);
+    }
+  }
   

@@ -15,6 +15,29 @@ const nextConfig = {
     experimental: {
       turbo: {}, // <-- Changed to an empty object
     },
+    // Add cache control headers to prevent browser caching
+    async headers() {
+      return [
+        {
+          // Apply to all routes
+          source: '/(.*)',
+          headers: [
+            {
+              key: 'Cache-Control',
+              value: 'no-cache, no-store, must-revalidate',
+            },
+            {
+              key: 'Pragma',
+              value: 'no-cache',
+            },
+            {
+              key: 'Expires',
+              value: '0',
+            },
+          ],
+        },
+      ];
+    },
   };
-  
+
   module.exports = nextConfig;

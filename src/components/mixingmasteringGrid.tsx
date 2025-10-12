@@ -16,8 +16,8 @@ export const MixingMasteringGridComponent = ({ setLoading }: MixingMasteringGrid
   const [message, setMessage] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState('');
-  const [saleActive, setSaleActive] = useState(false); 
-  const [salePercentage, setSalePercentage] = useState<number>(30); // change this number to set percent (e.g. 30)
+  const [saleActive, setSaleActive] = useState(false); // true = sale active
+  const [salePercentage, setSalePercentage] = useState<number>(50); // change this number to set percent (e.g. 30)
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {

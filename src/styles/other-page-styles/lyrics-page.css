@@ -143,6 +143,11 @@
   position: relative;
 }
 
+.lyrics-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
 .stanza {
   width: 100%;
   margin-bottom: 1.5rem;
@@ -190,11 +195,11 @@
 /* Dark mode overrides */
 @media (prefers-color-scheme: dark) {
   .lyrics-wrapper {
-    background: rgba(0, 0, 0, 0.05);
+    background: #1e293b; /* Solid dark gray */
   }
 
   .sidebar {
-    background: rgba(0, 0, 0, 0.1);
+    background: #0f172a; /* Solid darker gray */
     box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.1);
   }
 
@@ -203,19 +208,19 @@
   }
 
   .search-input {
-    background: var(--gray-800);
-    color: var(--light);
-    border-color: var(--gray-600);
+    background: #1e293b;
+    color: #ffffff;
+    border-color: #475569;
   }
 
   .search-input:focus {
-    border-color: var(--primary);
+    border-color: #9f89ff;
     box-shadow: 0 0 0 3px rgba(124, 93, 250, 0.2);
   }
 
   .song-item {
-    background: var(--gray-800);
-    color: var(--light);
+    background: #1e293b;
+    color: #ffffff;
   }
 
   .song-item:hover {
@@ -227,38 +232,50 @@
   }
 
   .lyrics-content {
-    background: rgba(0, 0, 0, 0.05);
+    background: #1e293b;
     box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.1);
   }
 
   .lyrics-title {
-    color: var(--light);
+    color: #ffffff;
+  }
+
+  .lyrics-header {
+    color: #ffffff;
+  }
+
+  .lyrics-header .section-heading {
+    color: #ffffff;
+  }
+
+  .lyrics-header .section-heading::after {
+    background: linear-gradient(to right, #9f89ff, #60a5fa);
   }
 
   .page-container {
-    background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-800) 50%, var(--gray-700) 100%);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
   }
 
   body {
-    background: linear-gradient(135deg, var(--gray-900) 0%, var(--gray-800) 50%, var(--gray-700) 100%);
-    color: var(--light);
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+    color: #ffffff;
   }
 
   .stanza {
-    background: var(--gray-800);
-    color: var(--light);
-    border-color: var(--gray-600);
+    background: #1e293b;
+    color: #ffffff;
+    border-color: #475569;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   }
 
   .stanza:hover {
-    background: var(--gray-700);
+    background: #334155;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   }
 
   .control-button {
-    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
-    color: var(--gray-900);
+    background: linear-gradient(135deg, #9f89ff 0%, #60a5fa 100%);
+    color: #0f172a;
   }
 
   .control-button:hover {
