@@ -1,25 +1,12 @@
-# TODO: Fix Mixing Request File Upload and Email System
+# TODO: Fix Dropdown Menu Contrast Issues
 
-## Completed Tasks
-- [ ] Analyze files and create plan
-- [ ] Get user approval for plan
+## Tasks
+- [x] Remove brightness filter from dropdown links to improve text visibility
+- [x] Darken dropdown background in light mode for better contrast
+- [x] Change text color to black in light mode and ensure dark background with white text in dark mode
+- [x] Test the changes to ensure readability
 
-## Pending Tasks
-- [x] Edit src/app/api/email/mixing-request/route.ts: Enhance admin email with detailed tier info (features, price, turnaround), file details (names, sizes, types), timestamp, total size warning. Add server-side validation for files. Send confirmation email to user after admin email. Improve error handling for 500 fix.
-- [x] Edit src/components/mixingmasteringGrid.tsx: Pass selectedTierId in FormData. Add client-side total file size check (<20MB warning). Update success message to mention confirmation email.
-- [x] Test changes: Run dev server, submit test form, verify emails sent without 500 error.
-- [x] Verify: Check admin email is detailed, user receives confirmation, files attached correctly.
-
-# TODO: Set Up Beats Shop Notifications
-
-## Completed Tasks
-- [x] Analyze existing Stripe integration and email setup
-- [x] Update /api/email/confirmation to send detailed admin email for embedded payments
-- [x] Update create-checkout-session success_url to new success page
-- [x] Create /beatsforsale/success page to handle checkout success
-- [x] Create /api/stripe/checkout-success to send emails for checkout sessions
-
-## Pending Tasks
-- [ ] Set EMAIL_USER and EMAIL_APP_PASSWORD in .env.local
-- [ ] Test purchase flow: Run dev server, simulate purchase, verify admin email receipt
-- [ ] Verify emails include customer details, beat info, payment amount
+## Notes
+- Issue: White text on white background in dropdown menu, making it unreadable
+- Solution: Adjust CSS in src/styles/site-wide-styles/styles.css
+- Changes: Remove filter: brightness(1.1); from .dropdown li a, and modify background gradient to be darker in light mode
