@@ -25,6 +25,13 @@ export default function Home() {
           <main>
             <section className="video-grid-section">
               <h1 className="section-heading">Featured Videos</h1>
+              {/* Manual Ad Slot - Replace 'YOUR_AD_SLOT_ID' with actual AdSense ad unit ID */}
+              <ins className="adsbygoogle"
+                   style={{ display: 'block' }}
+                   data-ad-client="ca-pub-4585137285765836"
+                   data-ad-slot="YOUR_AD_SLOT_ID"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
               <Suspense fallback={<div className="loading-placeholder">Loading videos...</div>}>
                 <VideoGrid setLoading={setLoading} />
               </Suspense>

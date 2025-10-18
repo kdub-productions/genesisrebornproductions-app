@@ -2,3 +2,8 @@
 - [x] Extract `fetchBeats` function in `beatsforsale/page.tsx` to enable refreshing data
 - [x] Add `fetchBeats()` call after successful removal to refresh admin table
 - [x] Test the remove functionality to ensure changes persist (server running, ready for manual testing)
+- [x] Remove AMP auto-ads configuration from src/app/document.tsx to prevent conflicts
+- [x] Add manual ad slot to src/app/page.tsx (homepage)
+- [x] Add manual ad slot to src/app/beatsforsale/page.tsx
+- [ ] Create ad units in Google AdSense dashboard and replace placeholders with actual slot IDs
+- [ ] Test ads in production environment and check browser console for errors

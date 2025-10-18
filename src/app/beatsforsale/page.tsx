@@ -273,6 +273,13 @@ export default function BeatsForSale() {
                 </div>
               )}
               <h1 className="section-heading">Beats For Sale</h1>
+              {/* Manual Ad Slot - Replace 'YOUR_AD_SLOT_ID' with actual AdSense ad unit ID */}
+              <ins className="adsbygoogle"
+                   style={{ display: 'block' }}
+                   data-ad-client="ca-pub-4585137285765836"
+                   data-ad-slot="YOUR_AD_SLOT_ID"
+                   data-ad-format="auto"
+                   data-full-width-responsive="true"></ins>
               {beatData.length > 0 ? (
                 <div className="beats-grid">
                   {beatData.map((beat) => (
